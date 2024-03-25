@@ -41,6 +41,7 @@ class Editor:
         self.right_clicking = False
         self.shift = False
 
+
     def run(self):
         while True:
             self.display.fill((0, 0, 0))
@@ -126,5 +127,6 @@ class Editor:
             self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0, 0))
             pygame.display.update()
             self.clock.tick(60)
+
 
 Editor().run()

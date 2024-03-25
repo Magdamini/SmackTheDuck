@@ -24,10 +24,11 @@ class Game:
             'player': load_image('player/0;0.png')
         }
 
-        self.player = PhysicsEntity(self, 'player', (50, 50), (8, 15))
+        self.player = PhysicsEntity(self, (50, 50), (8, 15))
 
         self.tilemap = Tilemap(self)
         self.tilemap.load('map.json')
+
 
     def run(self):
         while True:
@@ -64,5 +65,6 @@ class Game:
             self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0, 0))
             pygame.display.update()
             self.clock.tick(60)
+
 
 Game().run()
