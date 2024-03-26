@@ -39,16 +39,13 @@ class Game:
         self.player = Player(self, (50, 50), (16, 16))
 
         self.tilemap = Tilemap(self)
-        # self.tilemap.load('map.json')
-        self.tilemap.load('data/maps/grass_demo.json')
+        self.tilemap.load('map.json')
+        # self.tilemap.load('data/maps/water_demo.json')
 
 
     def run(self):
         while True:
-            # self.display.fill((0, 171, 65)) # visible map boundaries
-            self.display.fill((175, 188, 57)) # Grass color
-            # self.display.fill((114, 221, 239)) # Water color
-            # self.display.fill((136, 84, 71)) # Cave color
+            self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
 
             self.tilemap.render(self.display)
 

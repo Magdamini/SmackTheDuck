@@ -42,8 +42,10 @@ class Editor:
         self.scroll = [0, 0]
 
         self.tile_list = list(self.assets)
+        self.background_color_list = [(0, 0, 0), (114, 221, 239), (175, 188, 57), (136, 84, 71)]
         self.tile_group = 0
         self.tile_variant = 0
+        self.background_color = 0
 
         self.clicking = False
         self.right_clicking = False
@@ -75,7 +77,11 @@ class Editor:
                 if tile_loc in self.tilemap.tilemap:
                     del self.tilemap.tilemap[tile_loc]
             
-            self.display.blit(current_tile_img, (5, 5))
+            self.tilemap.tilemap["background_color"] = {'R': self.background_color_list[self.background_color][0], 'G': self.background_color_list[self.background_color][1], 'B': self.background_color_list[self.background_color][2]}
+
+            pygame.draw.rect(self.display, (255, 255, 255), (5, 5, 16, 16))
+            pygame.draw.rect(self.display, self.background_color_list[self.background_color], (6, 6, 14, 14))
+            self.display.blit(current_tile_img, (5, 26))
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -115,6 +121,8 @@ class Editor:
                         self.movement[2] = True
                     if event.key == pygame.K_s:
                         self.movement[3] = True
+                    if event.key == pygame.K_p:
+                        self.background_color = (self.background_color + 1) % len(self.background_color_list)
                     if event.key == pygame.K_o: # o = output
                         self.tilemap.save('map.json')
                     if event.key == pygame.K_LSHIFT:
