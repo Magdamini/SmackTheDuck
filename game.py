@@ -28,7 +28,7 @@ class Game:
             'player/' + PlayerActions.LEFT.value: Animation(load_images('player/' + PlayerActions.LEFT.value))
         }
 
-        self.player = Player(self, (50, 50), (8, 15))
+        self.player = Player(self, (50, 50), (16, 16))
 
         self.tilemap = Tilemap(self)
         self.tilemap.load('map.json')
@@ -37,6 +37,7 @@ class Game:
     def run(self):
         while True:
             self.display.fill((0, 171, 65))
+            # self.display.fill((176, 188, 60))
 
             self.tilemap.render(self.display)
 

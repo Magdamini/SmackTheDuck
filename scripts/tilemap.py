@@ -21,6 +21,15 @@ class Tilemap:
                 tiles.append(self.tilemap[check_loc])
         return tiles
     
+    def rect_out_of_the_map(self, pos):
+        outside_tiles = []
+        tile_loc = (int(pos[0] // self.tile_size), int(pos[1] // self.tile_size))
+        for offset in NEIGHBOR_OFFSETS:
+            check_loc = str(tile_loc[0] + offset[0]) + ';' + str(tile_loc[1] + offset[1])
+            if check_loc not in self.tilemap:
+                outside_tiles.append(pygame.Rect((tile_loc[0] + offset[0]) * self.tile_size, (tile_loc[1] + offset[1]) * self.tile_size, self.tile_size, self.tile_size))
+        return outside_tiles
+    
 
     def save(self, path):
         f = open(path, 'w')
@@ -43,6 +52,9 @@ class Tilemap:
             if tile['type'] in PHYSICS_TILES:
                 rects.append(pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size))
         return rects
+    
+    def forbidden_rects(self, pos):
+        return self.physics_rects_around(pos) + self.rect_out_of_the_map(pos)
 
 
     def render(self, surf, offset=(0, 0)):
@@ -52,4 +64,5 @@ class Tilemap:
                 if loc in self.tilemap:
                     tile = self.tilemap[loc]
                     surf.blit(self.game.assets[tile['type']][tile['variant']], (tile['pos'][0] * self.tile_size - offset[0], tile['pos'][1] * self.tile_size - offset[1]))
+        
 

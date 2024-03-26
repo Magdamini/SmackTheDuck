@@ -28,10 +28,7 @@ class Player:
             self.action = new_action
             self.animation = self.game.assets["player/" + self.action.value]  
             self.animation.set_start_state()
-            
-    def is_running(self):
-        if self.running: return 2
-        return 1
+                
 
 
     def update(self, tilemap, movement=(0, 0)):
@@ -42,24 +39,27 @@ class Player:
 
         self.pos[0] += frame_movement[0] * is_running
         entity_rect = self.rect()
-        for rect in tilemap.physics_rects_around(self.pos):
+        for rect in tilemap.forbidden_rects(self.pos):
             if entity_rect.colliderect(rect):
                 if frame_movement[0] > 0:
                     entity_rect.right = rect.left
                 if frame_movement[0] < 0:
                     entity_rect.left = rect.right
-                self.pos[0] = entity_rect.x  
+                self.pos[0] = entity_rect.x
+
         
 
         self.pos[1] += frame_movement[1] * is_running
         entity_rect = self.rect()
-        for rect in tilemap.physics_rects_around(self.pos):
+        for rect in tilemap.forbidden_rects(self.pos):
             if entity_rect.colliderect(rect):
                 if frame_movement[1] > 0:
                     entity_rect.bottom = rect.top
                 if frame_movement[1] < 0:
                     entity_rect.top = rect.bottom
                 self.pos[1] = entity_rect.y
+                
+
              
         new_action = PlayerActions.STANDING   
         if movement[0] > 0: new_action = PlayerActions.RIGHT
