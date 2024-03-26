@@ -19,7 +19,15 @@ class Editor:
 
         self.assets = {
             'GrassFloor': load_images('tiles/GrassFloor'),
-            'Water': load_images('tiles/Water'),
+            'GrassTrees': load_images('tiles/GrassTrees'),
+            'GrassBuildings': load_images('tiles/GrassBuildings'),
+            'GrassBushes': load_images('tiles/GrassBushes'),
+            'GrassDecor': load_images('tiles/GrassDecor'),
+            'GrassIndoorDecor': load_images('tiles/GrassIndoorDecor'),
+            'WaterFloor': load_images('tiles/WaterFloor'),
+            'WaterCatwalk': load_images('tiles/WaterCatwalk'),
+            'Cave': load_images('tiles/Cave'),
+            'CaveOutside': load_images('tiles/CaveOutside'),
         }
 
         self.movement = [False, False, False, False]
