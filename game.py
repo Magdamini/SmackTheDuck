@@ -79,7 +79,6 @@ class Game:
                         self.movement[3] = False
                     if event.key  == pygame.K_LSHIFT:
                         self.player.running = False
-                        
 
             self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0, 0))
             pygame.display.update()
