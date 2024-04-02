@@ -19,7 +19,15 @@ class Game:
 
         self.assets = {
             'GrassFloor': load_images('tiles/GrassFloor'),
-            'Water': load_images('tiles/Water'),
+            'GrassTrees': load_images('tiles/GrassTrees'),
+            'GrassBuildings': load_images('tiles/GrassBuildings'),
+            'GrassBushes': load_images('tiles/GrassBushes'),
+            'GrassDecor': load_images('tiles/GrassDecor'),
+            'GrassIndoorDecor': load_images('tiles/GrassIndoorDecor'),
+            'WaterFloor': load_images('tiles/WaterFloor'),
+            'WaterCatwalk': load_images('tiles/WaterCatwalk'),
+            'Cave': load_images('tiles/Cave'),
+            'CaveOutside': load_images('tiles/CaveOutside'),
             
             'player/' + PlayerActions.STANDING.value: Animation(load_images('player/' + PlayerActions.STANDING.value)),
             'player/' + PlayerActions.UP.value: Animation(load_images('player/' + PlayerActions.UP.value)),
@@ -32,12 +40,12 @@ class Game:
 
         self.tilemap = Tilemap(self)
         self.tilemap.load('map.json')
+        # self.tilemap.load('data/maps/water_demo.json')
 
 
     def run(self):
         while True:
-            self.display.fill((0, 171, 65))
-            # self.display.fill((176, 188, 60))
+            self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
 
             self.tilemap.render(self.display)
 
@@ -71,7 +79,6 @@ class Game:
                         self.movement[3] = False
                     if event.key  == pygame.K_LSHIFT:
                         self.player.running = False
-                        
 
             self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0, 0))
             pygame.display.update()

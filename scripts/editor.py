@@ -6,6 +6,11 @@ from utils import load_images
 from tilemap import Tilemap
 
 RENDER_SCALE = 2.0
+MOUSE_LEFT_BUTTON = 1
+MOUSE_RIGHT_BUTTON = 3
+MOUSE_SCROLL_UP = 4
+MOUSE_SCROLL_DOWN = 5
+
 
 class Editor:
     def __init__(self):        
@@ -19,7 +24,15 @@ class Editor:
 
         self.assets = {
             'GrassFloor': load_images('tiles/GrassFloor'),
-            'Water': load_images('tiles/Water'),
+            'GrassTrees': load_images('tiles/GrassTrees'),
+            'GrassBuildings': load_images('tiles/GrassBuildings'),
+            'GrassBushes': load_images('tiles/GrassBushes'),
+            'GrassDecor': load_images('tiles/GrassDecor'),
+            'GrassIndoorDecor': load_images('tiles/GrassIndoorDecor'),
+            'WaterFloor': load_images('tiles/WaterFloor'),
+            'WaterCatwalk': load_images('tiles/WaterCatwalk'),
+            'Cave': load_images('tiles/Cave'),
+            'CaveOutside': load_images('tiles/CaveOutside'),
         }
 
         self.movement = [False, False, False, False]
@@ -34,12 +47,70 @@ class Editor:
         self.scroll = [0, 0]
 
         self.tile_list = list(self.assets)
+        self.background_color_list = [(0, 0, 0), (114, 221, 239), (175, 188, 57), (136, 84, 71)]
         self.tile_group = 0
         self.tile_variant = 0
+        self.background_color = 0
 
         self.clicking = False
         self.right_clicking = False
         self.shift = False
+
+
+    def mouse_button_down(self, event):
+        if event.button == MOUSE_LEFT_BUTTON:
+            self.clicking = True
+        if event.button == MOUSE_RIGHT_BUTTON:
+            self.right_clicking = True
+        if self.shift:
+            if event.button == MOUSE_SCROLL_UP:
+                self.tile_variant = (self.tile_variant - 1) % len(self.assets[self.tile_list[self.tile_group]])
+            if event.button == MOUSE_SCROLL_DOWN:
+                self.tile_variant = (self.tile_variant + 1) % len(self.assets[self.tile_list[self.tile_group]])
+        else:
+            if event.button == MOUSE_SCROLL_UP:
+                self.tile_group = (self.tile_group - 1) % len(self.tile_list)
+                self.tile_variant = 0
+            if event.button == MOUSE_SCROLL_DOWN:
+                self.tile_group = (self.tile_group + 1) % len(self.tile_list)
+                self.tile_variant = 0
+
+
+    def mouse_button_up(self, event):
+        if event.button == MOUSE_LEFT_BUTTON:
+            self.clicking = False
+        if event.button == MOUSE_RIGHT_BUTTON:
+            self.right_clicking = False
+
+
+    def key_down(self, event):
+        if event.key == pygame.K_a:
+            self.movement[0] = True
+        if event.key == pygame.K_d:
+            self.movement[1] = True
+        if event.key == pygame.K_w:
+            self.movement[2] = True
+        if event.key == pygame.K_s:
+            self.movement[3] = True
+        if event.key == pygame.K_p:
+            self.background_color = (self.background_color + 1) % len(self.background_color_list)
+        if event.key == pygame.K_o: # o = output
+            self.tilemap.save('map.json')
+        if event.key == pygame.K_LSHIFT:
+            self.shift = True
+
+
+    def key_up(self, event):
+        if event.key == pygame.K_a:
+            self.movement[0] = False
+        if event.key == pygame.K_d:
+            self.movement[1] = False
+        if event.key == pygame.K_w:
+            self.movement[2] = False
+        if event.key == pygame.K_s:
+            self.movement[3] = False
+        if event.key == pygame.K_LSHIFT:
+            self.shift = False
 
 
     def run(self):
@@ -67,62 +138,28 @@ class Editor:
                 if tile_loc in self.tilemap.tilemap:
                     del self.tilemap.tilemap[tile_loc]
             
-            self.display.blit(current_tile_img, (5, 5))
+            self.tilemap.tilemap["background_color"] = {'R': self.background_color_list[self.background_color][0], 'G': self.background_color_list[self.background_color][1], 'B': self.background_color_list[self.background_color][2]}
+
+            pygame.draw.rect(self.display, (255, 255, 255), (5, 5, 16, 16))
+            pygame.draw.rect(self.display, self.background_color_list[self.background_color], (6, 6, 14, 14))
+            self.display.blit(current_tile_img, (5, 26))
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                    
+                
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        self.clicking = True
-                    if event.button == 3:
-                        self.right_clicking = True
-                    if self.shift:
-                        if event.button == 4:
-                            self.tile_variant = (self.tile_variant - 1) % len(self.assets[self.tile_list[self.tile_group]])
-                        if event.button == 5:
-                            self.tile_variant = (self.tile_variant + 1) % len(self.assets[self.tile_list[self.tile_group]])
-                    else:
-                        if event.button == 4:
-                            self.tile_group = (self.tile_group - 1) % len(self.tile_list)
-                            self.tile_variant = 0
-                        if event.button == 5:
-                            self.tile_group = (self.tile_group + 1) % len(self.tile_list)
-                            self.tile_variant = 0
+                    self.mouse_button_down(event)
 
                 if event.type == pygame.MOUSEBUTTONUP:
-                    if event.button == 1:
-                        self.clicking = False
-                    if event.button == 3:
-                        self.right_clicking = False
+                    self.mouse_button_up(event)
 
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_a:
-                        self.movement[0] = True
-                    if event.key == pygame.K_d:
-                        self.movement[1] = True
-                    if event.key == pygame.K_w:
-                        self.movement[2] = True
-                    if event.key == pygame.K_s:
-                        self.movement[3] = True
-                    if event.key == pygame.K_o: # o = output
-                        self.tilemap.save('map.json')
-                    if event.key == pygame.K_LSHIFT:
-                        self.shift = True
+                    self.key_down(event)
 
                 if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_a:
-                        self.movement[0] = False
-                    if event.key == pygame.K_d:
-                        self.movement[1] = False
-                    if event.key == pygame.K_w:
-                        self.movement[2] = False
-                    if event.key == pygame.K_s:
-                        self.movement[3] = False
-                    if event.key == pygame.K_LSHIFT:
-                        self.shift = False
+                    self.key_up(event)
 
             self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0, 0))
             pygame.display.update()
