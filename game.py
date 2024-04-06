@@ -4,6 +4,7 @@ import pygame
 from scripts.utils import load_image, load_images, Animation
 from scripts.player import Player, PlayerActions
 from scripts.tilemap import Tilemap
+from scripts.camera import Camera
 
 class Game:
     def __init__(self):        
@@ -37,20 +38,27 @@ class Game:
         }
 
         self.player = Player(self, (50, 50), (16, 16))
-
+        
+        
         self.tilemap = Tilemap(self)
         self.tilemap.load('map.json')
-        # self.tilemap.load('data/maps/water_demo.json')
+        # self.tilemap.load('data/maps/cave_demo.json')
+        
+        
+        # przy zmnianie mapy będzie trzeba uważać na kamerę bo tam dałam mapę jako atrybut
+        # po prostu jakiś szybki update czy coś, ale byle o tym pamiętać
+        self.camera = Camera(self.display, self.player, self.tilemap)
 
 
     def run(self):
         while True:
             self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
 
-            self.tilemap.render(self.display)
-
             self.player.update(self.tilemap, (self.movement[1] - self.movement[0], self.movement[3] - self.movement[2]))
-            self.player.render(self.display)
+            self.camera.update()
+
+            self.tilemap.render(self.display, self.camera.pos)
+            self.player.render(self.display, self.camera.pos)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
