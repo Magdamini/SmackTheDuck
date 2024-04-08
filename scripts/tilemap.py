@@ -87,8 +87,8 @@ class Tilemap:
 
 
     def render(self, surf, offset=(0, 0)):
-        for x in range(offset[0] // self.tile_size, (offset[0] + surf.get_width()) // self.tile_size + 1):
-            for y in range(offset[1] // self.tile_size, (offset[1] + surf.get_height()) // self.tile_size + 1):
+        for y in range(offset[1] // self.tile_size -4, (offset[1] + surf.get_height()) // self.tile_size + 4):
+            for x in range(offset[0] // self.tile_size -4, (offset[0] + surf.get_width()) // self.tile_size + 4):
                 loc = str(x) + ';' + str(y)
                 if loc in self.tilemap:
                     tile = self.tilemap[loc]

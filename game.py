@@ -62,8 +62,7 @@ class Game:
         self.player = Player(self, (50, 50), (16, 16))
 
         self.tilemap = Tilemap(self)
-        # self.tilemap.load('map.json')
-        self.tilemap.load('data/maps/0.json')
+        self.tilemap.load('data/maps/5a.json')
 
 
     def run(self):
