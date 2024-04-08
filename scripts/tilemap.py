@@ -7,9 +7,9 @@ NEIGHBOR_OFFSETS = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1),
 # TODO json for PHYSICS_TILES
 PHYSICS_TILES = {'Cave': {1, 2, 3, 9, 10, 11, 12, 13, 14, 15},
                  'CaveOutside': {0, 1, 2, 3, 5, 6, 7, 8, 9, 10},
-                 'CaveOutside00': {0, 1, 2, 3, 5, 6, 8}, # 4 - wejście
-                 'CaveOutside01': {0, 1, 2, 3, 5, 6, 8}, # 4 - wejście
-                 'CaveOutside02': {0, 1, 2, 3, 5, 6, 8}, # 4 - wejście
+                 'CaveOutside00': {0, 1, 2, 3, 5}, # 4 - wejście
+                 'CaveOutside01': {0, 1, 2, 3, 5}, # 4 - wejście
+                 'CaveOutside02': {0, 1, 2, 3, 5}, # 4 - wejście
                  'GrassBuildings': {0, 1, 2, 3, 4},
                  'GrassBuildings00': {1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19}, # 17 - wejście
                  'GrassBuildings01': {1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},

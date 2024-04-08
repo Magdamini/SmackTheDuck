@@ -65,8 +65,7 @@ class Game:
         
         self.tilemap = Tilemap(self)
 
-        self.tilemap.load('map.json')
-        # self.tilemap.load('data/maps/cave_demo.json')
+        self.tilemap.load('data/maps/5.json')
         
         # przy zmnianie mapy będzie trzeba uważać na kamerę bo tam dałam mapę jako atrybut
         # po prostu jakiś szybki update czy coś, ale byle o tym pamiętać
