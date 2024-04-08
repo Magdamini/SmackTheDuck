@@ -1,9 +1,40 @@
 import json
 
 import pygame
+from scripts.utils import load_json
 
 NEIGHBOR_OFFSETS = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1), (0, 0)]
-PHYSICS_TILES = {'WaterFloor', 'GrassTrees', 'GrassDecor', 'GrassIndoorDecor', 'GrassBuildings', 'CaveOutside'}
+# TODO json for PHYSICS_TILES
+PHYSICS_TILES = {'Cave': {1, 2, 3, 9, 10, 11, 12, 13, 14, 15},
+                 'CaveOutside': {0, 1, 2, 3, 5, 6, 7, 8, 9, 10},
+                 'CaveOutside00': {0, 1, 2, 3, 5, 6, 8}, # 4 - wejście
+                 'CaveOutside01': {0, 1, 2, 3, 5, 6, 8}, # 4 - wejście
+                 'CaveOutside02': {0, 1, 2, 3, 5, 6, 8}, # 4 - wejście
+                 'GrassBuildings': {0, 1, 2, 3, 4},
+                 'GrassBuildings00': {1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19}, # 17 - wejście
+                 'GrassBuildings01': {1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},
+                 'GrassBuildings02': {0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11}, 
+                 'GrassBuildings03': {1, 3, 4, 5, 6, 7, 8},
+                 'GrassBuildings04': {1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},
+                 'GrassDecor': {0, 1, 2, 3, 4, 5, 6, 7, 8},
+                 'GrassDecor00': {0, 1},
+                 'GrassDecor02': {0, 1, 2, 3, 4, 5, 6, 7},
+                 'GrassDecor03': {0, 1, 2, 3},
+                 'GrassIndoorDecor': {0, 1, 2, 3, 4, 5, 6, 7, 8},
+                 'GrassIndoorDecor05': {0, 1},
+                 'GrassIndoorDecor06': {0, 1},
+                 'GrassIndoorDecor07': {0, 1},
+                 'GrassIndoorDecor08': {0, 1},
+                 'GrassTrees': {0, 1},
+                 'GrassTrees00': {0, 1, 2, 3},
+                 'GrassTrees01': {1, 2, 4, 5, 6, 7, 8, 9, 10, 11},
+                 'HouseFloor': {0, 1, 2, 3, 4, 5, 6, 7, 8}, # 21 - wejście
+                 'HouseIndoor': {0, 1},
+                 'HouseIndoor00': {0, 1, 2, 3},
+                 'HouseIndoor01': {0, 1, 2, 3},
+                 'WaterCatwalk': {2, 7, 8},
+                 'WaterFloor': {0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13}}
+
 
 class Tilemap:
     def __init__(self, game, tile_size=16):
@@ -21,6 +52,7 @@ class Tilemap:
                 tiles.append(self.tilemap[check_loc])
         return tiles
     
+    
     def rect_out_of_the_map(self, pos):
         outside_tiles = []
         tile_loc = (int(pos[0] // self.tile_size), int(pos[1] // self.tile_size))
@@ -32,16 +64,13 @@ class Tilemap:
     
 
     def save(self, path):
-        f = open(path, 'w')
-        json.dump({'tilemap': self.tilemap, 'tile_size': self.tile_size}, f)
-        f.close
+        file = open(path, 'w')
+        json.dump({'tilemap': self.tilemap, 'tile_size': self.tile_size}, file)
+        file.close
 
 
     def load(self, path):
-        f = open(path, 'r')
-        map_data = json.load(f)
-        f.close()
-
+        map_data = load_json(path)
         self.tilemap = map_data['tilemap']
         self.tile_size = map_data['tile_size']
 
@@ -49,7 +78,7 @@ class Tilemap:
     def physics_rects_around(self, pos):
         rects = []
         for tile in self.tiles_around(pos):
-            if tile['type'] in PHYSICS_TILES:
+            if tile['type'] in PHYSICS_TILES.keys() and tile['variant'] in PHYSICS_TILES[tile['type']]:
                 rects.append(pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size))
         return rects
     
