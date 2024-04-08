@@ -72,6 +72,6 @@ class Player:
         self.animation.update()
 
 
-    def render(self, surf):
-        surf.blit(self.animation.get_img(), self.pos)
+    def render(self, surf, offset=(0,0)):
+        surf.blit(self.animation.get_img(), (self.pos[0] - offset[0], self.pos[1] - offset[1]))
     
