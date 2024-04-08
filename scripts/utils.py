@@ -1,7 +1,15 @@
 import os
 import pygame
+import json
 
 BASE_IMG_PATH = 'data/images/'
+
+
+def load_json(path):
+    file = open(path, 'r')
+    data = json.load(file)
+    file.close()
+    return data
 
 
 def load_image(path):
@@ -13,7 +21,8 @@ def load_image(path):
 def load_images(path):
     images = []
     for img_name in os.listdir(BASE_IMG_PATH + path):
-        images.append(load_image(path + '/' + img_name))
+        if os.path.isfile(BASE_IMG_PATH + path + '/' + img_name) and img_name.lower().endswith('.png'):
+            images.append(load_image(path + '/' + img_name))
     return images
 
 

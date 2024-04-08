@@ -18,16 +18,39 @@ class Game:
         self.movement = [False, False, False, False]
 
         self.assets = {
-            'GrassFloor': load_images('tiles/GrassFloor'),
-            'GrassTrees': load_images('tiles/GrassTrees'),
-            'GrassBuildings': load_images('tiles/GrassBuildings'),
-            'GrassBushes': load_images('tiles/GrassBushes'),
-            'GrassDecor': load_images('tiles/GrassDecor'),
-            'GrassIndoorDecor': load_images('tiles/GrassIndoorDecor'),
-            'WaterFloor': load_images('tiles/WaterFloor'),
-            'WaterCatwalk': load_images('tiles/WaterCatwalk'),
             'Cave': load_images('tiles/Cave'),
             'CaveOutside': load_images('tiles/CaveOutside'),
+            'CaveOutside00': load_images('tiles/CaveOutside/00'),
+            'CaveOutside01': load_images('tiles/CaveOutside/01'),
+            'CaveOutside02': load_images('tiles/CaveOutside/02'),
+            'GrassFloor': load_images('tiles/GrassFloor'),
+            'GrassGoose': load_images('tiles/GrassGoose'),
+            'GrassTrees': load_images('tiles/GrassTrees'),
+            'GrassTrees00': load_images('tiles/GrassTrees/00'),
+            'GrassTrees01': load_images('tiles/GrassTrees/01'),
+            'GrassBuildings': load_images('tiles/GrassBuildings'),
+            'GrassBuildings00': load_images('tiles/GrassBuildings/00'),
+            'GrassBuildings01': load_images('tiles/GrassBuildings/01'),
+            'GrassBuildings02': load_images('tiles/GrassBuildings/02'),
+            'GrassBuildings03': load_images('tiles/GrassBuildings/03'),
+            'GrassBuildings04': load_images('tiles/GrassBuildings/04'),
+            'GrassBushes': load_images('tiles/GrassBushes'),
+            'GrassDecor': load_images('tiles/GrassDecor'),
+            'GrassDecor00': load_images('tiles/GrassDecor/00'),
+            'GrassDecor02': load_images('tiles/GrassDecor/02'),
+            'GrassDecor03': load_images('tiles/GrassDecor/03'),
+            'GrassIndoorDecor': load_images('tiles/GrassIndoorDecor'),
+            'GrassIndoorDecor05': load_images('tiles/GrassIndoorDecor/05'),
+            'GrassIndoorDecor06': load_images('tiles/GrassIndoorDecor/06'),
+            'GrassIndoorDecor07': load_images('tiles/GrassIndoorDecor/07'),
+            'GrassIndoorDecor08': load_images('tiles/GrassIndoorDecor/08'),
+            'WaterFloor': load_images('tiles/WaterFloor'),
+            'WaterCatwalk': load_images('tiles/WaterCatwalk'),
+            'HouseFloor': load_images('tiles/HouseFloor'),
+            'HouseIndoor': load_images('tiles/HouseIndoor'),
+            'HouseIndoor00': load_images('tiles/HouseIndoor/00'),
+            'HouseIndoor01': load_images('tiles/HouseIndoor/01'),
+            'Items': load_images('tiles/Items'),
             
             'player/' + PlayerActions.STANDING.value: Animation(load_images('player/' + PlayerActions.STANDING.value)),
             'player/' + PlayerActions.UP.value: Animation(load_images('player/' + PlayerActions.UP.value)),
@@ -39,8 +62,7 @@ class Game:
         self.player = Player(self, (50, 50), (16, 16))
 
         self.tilemap = Tilemap(self)
-        self.tilemap.load('map.json')
-        # self.tilemap.load('data/maps/water_demo.json')
+        self.tilemap.load('data/maps/5a.json')
 
 
     def run(self):
