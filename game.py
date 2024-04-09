@@ -82,10 +82,11 @@ class Game:
             self.map_handler.change_map()
             self.camera.update()
             self.item_collector.collect_items(self.tilemap)
+            self.battle_detector.detect_battle()
             
             self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
 
-            self.battle_detector.detect_battle()
+            
             self.tilemap.render(self.display, self.camera.pos)
             self.player.render(self.display, self.camera.pos)
 
