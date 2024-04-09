@@ -12,8 +12,6 @@ class Camera:
         # left/right
         if self.bounds[1] - self.bounds[0] > self.width:
             self.pos[0] = int(self.player.pos[0] - self.width / 2 + self.player.size[0] / 2)
-            
-            
             if self.pos[0] < self.bounds[0]:
                 self.pos[0] = self.bounds[0]
             elif self.pos[0] + self.width > self.bounds[1]:

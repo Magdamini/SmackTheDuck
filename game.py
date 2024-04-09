@@ -5,6 +5,8 @@ from scripts.utils import load_image, load_images, Animation
 from scripts.player import Player, PlayerActions
 from scripts.tilemap import Tilemap
 from scripts.camera import Camera
+from scripts.battle_detector import Battle_detector
+from scripts.fighter import FightingPlayer
 from scripts.map_handler import MapHandler
 from scripts.item_collector import ItemCollector
 
@@ -70,6 +72,9 @@ class Game:
         self.camera = Camera(self.display, self.player, self.tilemap)
         self.item_collector = ItemCollector(self.player)
 
+        self.fighting_player = FightingPlayer(["Ogłuszacz", "Lowkick", "Rzut ala precel", "Kijem między oczy"], 3)
+        self.battle_detector = Battle_detector(self.player, self.fighting_player, self.tilemap)
+
 
     def run(self):
         while True:
@@ -80,6 +85,7 @@ class Game:
             
             self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
 
+            self.battle_detector.detect_battle()
             self.tilemap.render(self.display, self.camera.pos)
             self.player.render(self.display, self.camera.pos)
 
