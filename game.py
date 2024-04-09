@@ -6,6 +6,7 @@ from scripts.player import Player, PlayerActions
 from scripts.tilemap import Tilemap
 from scripts.camera import Camera
 from scripts.map_handler import MapHandler
+from scripts.item_collector import ItemCollector
 
 class Game:
     def __init__(self):        
@@ -64,20 +65,20 @@ class Game:
         self.player = Player(self, (150, 150), (16, 16))
         
         self.map_handler = MapHandler(self, self.player)
-        
         self.tilemap = self.map_handler.get_curr_map()
         
         self.camera = Camera(self.display, self.player, self.tilemap)
+        self.item_collector = ItemCollector(self.player)
 
 
     def run(self):
         while True:
-            self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
-
             self.player.update(self.tilemap, (self.movement[1] - self.movement[0], self.movement[3] - self.movement[2]))
             self.map_handler.change_map()
             self.camera.update()
-            print(self.player.pos)
+            self.item_collector.collect_items(self.tilemap)
+            
+            self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
 
             self.tilemap.render(self.display, self.camera.pos)
             self.player.render(self.display, self.camera.pos)
