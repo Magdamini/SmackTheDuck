@@ -1,5 +1,6 @@
 import pygame
 from enum import Enum
+from scripts.backpack import Backpack
 
 class PlayerActions(Enum):
     LEFT = 'left'
@@ -15,6 +16,7 @@ class Player:
         self.pos = list(pos)
         self.size = size
         self.running = False
+        self.backpack = Backpack()
         
         self.action = PlayerActions.UP
         self.update_action(PlayerActions.STANDING)
@@ -23,13 +25,13 @@ class Player:
     def rect(self):
         return pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
     
+
     def update_action(self, new_action):
         if self.action != new_action:
             self.action = new_action
             self.animation = self.game.assets["player/" + self.action.value]  
             self.animation.set_start_state()
                 
-
 
     def update(self, tilemap, movement=(0, 0)):
         frame_movement = (movement[0], movement[1])
@@ -47,8 +49,6 @@ class Player:
                     entity_rect.left = rect.right
                 self.pos[0] = entity_rect.x
 
-        
-
         self.pos[1] += frame_movement[1] * is_running
         entity_rect = self.rect()
         for rect in tilemap.forbidden_rects(self.pos):
@@ -58,8 +58,6 @@ class Player:
                 if frame_movement[1] < 0:
                     entity_rect.top = rect.bottom
                 self.pos[1] = entity_rect.y
-                
-
              
         new_action = PlayerActions.STANDING   
         if movement[0] > 0: new_action = PlayerActions.RIGHT
