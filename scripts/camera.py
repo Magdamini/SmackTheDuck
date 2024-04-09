@@ -26,3 +26,7 @@ class Camera:
                 self.pos[1] = self.bounds[3] - self.height
             elif self.pos[1] < self.bounds[2]:
                 self.pos[1] = self.bounds[2]
+
+    def set_map(self, tilemap):
+        self.bounds = tilemap.get_bounds()
+        self.pos = [0, 0]

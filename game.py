@@ -5,6 +5,7 @@ from scripts.utils import load_image, load_images, Animation
 from scripts.player import Player, PlayerActions
 from scripts.tilemap import Tilemap
 from scripts.camera import Camera
+from scripts.map_handler import MapHandler
 
 class Game:
     def __init__(self):        
@@ -60,15 +61,12 @@ class Game:
             'player/' + PlayerActions.LEFT.value: Animation(load_images('player/' + PlayerActions.LEFT.value))
         }
 
-        self.player = Player(self, (50, 50), (16, 16))
+        self.player = Player(self, (150, 150), (16, 16))
         
+        self.map_handler = MapHandler(self, self.player)
         
-        self.tilemap = Tilemap(self)
-
-        self.tilemap.load('data/maps/5.json')
+        self.tilemap = self.map_handler.get_curr_map()
         
-        # przy zmnianie mapy będzie trzeba uważać na kamerę bo tam dałam mapę jako atrybut
-        # po prostu jakiś szybki update czy coś, ale byle o tym pamiętać
         self.camera = Camera(self.display, self.player, self.tilemap)
 
 
@@ -77,7 +75,9 @@ class Game:
             self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
 
             self.player.update(self.tilemap, (self.movement[1] - self.movement[0], self.movement[3] - self.movement[2]))
+            self.map_handler.change_map()
             self.camera.update()
+            print(self.player.pos)
 
             self.tilemap.render(self.display, self.camera.pos)
             self.player.render(self.display, self.camera.pos)
