@@ -30,13 +30,13 @@ class MedicalKit(Item):
     def __init__(self, x, y):
         super().__init__(x, y, "02", "Medical Kit")
         
-class todo1(Item):
+class DuckLeg(Item):
     def __init__(self, x, y):
-        super().__init__(x, y, "03", "todo1")
+        super().__init__(x, y, "03", "Duck Leg")
         
-class todo2(Item):
+class RawMeat(Item):
     def __init__(self, x, y):
-        super().__init__(x, y, "04", "todo2")
+        super().__init__(x, y, "04", "RawMeat")
         
 class Shoes(Item):
     def __init__(self, x, y):
@@ -49,19 +49,15 @@ class Jacket(Item):
 class Blood(Item):
     def __init__(self, x, y):
         super().__init__(x, y, "07", "Blood")
+         
         
-class todo3(Item):
+class SmallAggressionPotion(Item):
     def __init__(self, x, y):
-        super().__init__(x, y, "08", "todo3")
+        super().__init__(x, y, "09", "Small Aggression Potion")
         
-        
-class SmallBottle1(Item):
+class AggressionPotion(Item):
     def __init__(self, x, y):
-        super().__init__(x, y, "09", "SmallBootle1")
-        
-class Bootle1(Item):
-    def __init__(self, x, y):
-        super().__init__(x, y, "10", "Bootle1")
+        super().__init__(x, y, "10", "Aggression Potion")
         
 class Flowers(Item):
     def __init__(self, x, y):
@@ -72,18 +68,18 @@ class Clover(Item):
     def __init__(self, x, y):
         super().__init__(x, y, "12", "Clover")
         
-class todo4(Item):
+class Stones(Item):
     def __init__(self, x, y):
-        super().__init__(x, y, "13", "todo4")
+        super().__init__(x, y, "13", "Stones")
         
 class Letter(Item):
     def __init__(self, x, y):
         super().__init__(x, y, "14", "Letter")
         
-class SmallBottle2(Item):
+class SmallAgilityPotion(Item):
     def __init__(self, x, y):
-        super().__init__(x, y, "15", "SmallBottle2")
+        super().__init__(x, y, "15", "Small Agility Potion")
         
-class Bottle2(Item):
+class AgilityPotion(Item):
     def __init__(self, x, y):
-        super().__init__(x, y, "16", "Bottle2")
+        super().__init__(x, y, "16", "Agility Potion")
