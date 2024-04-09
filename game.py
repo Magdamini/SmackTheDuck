@@ -5,6 +5,8 @@ from scripts.utils import load_image, load_images, Animation
 from scripts.player import Player, PlayerActions
 from scripts.tilemap import Tilemap
 from scripts.camera import Camera
+from scripts.battle_detector import Battle_detector
+from scripts.fighter import FightingPlayer
 
 class Game:
     def __init__(self):        
@@ -62,7 +64,6 @@ class Game:
 
         self.player = Player(self, (50, 50), (16, 16))
         
-        
         self.tilemap = Tilemap(self)
 
         self.tilemap.load('data/maps/5.json')
@@ -70,6 +71,9 @@ class Game:
         # przy zmnianie mapy będzie trzeba uważać na kamerę bo tam dałam mapę jako atrybut
         # po prostu jakiś szybki update czy coś, ale byle o tym pamiętać
         self.camera = Camera(self.display, self.player, self.tilemap)
+
+        self.fighting_player = FightingPlayer(["Ogłuszacz", "Lowkick", "Rzut ala precel", "Kijem między oczy"], 3)
+        self.battle_detector = Battle_detector(self.player, self.fighting_player, self.tilemap)
 
 
     def run(self):
@@ -79,6 +83,7 @@ class Game:
             self.player.update(self.tilemap, (self.movement[1] - self.movement[0], self.movement[3] - self.movement[2]))
             self.camera.update()
 
+            self.battle_detector.detect_battle()
             self.tilemap.render(self.display, self.camera.pos)
             self.player.render(self.display, self.camera.pos)
 

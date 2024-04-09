@@ -82,6 +82,7 @@ class Tilemap:
                 rects.append(pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size))
         return rects
     
+
     def forbidden_rects(self, pos):
         return self.physics_rects_around(pos) + self.rect_out_of_the_map(pos)
 
@@ -94,6 +95,7 @@ class Tilemap:
                     tile = self.tilemap[loc]
                     surf.blit(self.game.assets[tile['type']][tile['variant']], (tile['pos'][0] * self.tile_size - offset[0], tile['pos'][1] * self.tile_size - offset[1]))
         
+
     def get_bounds(self):
         inf = float('inf')
         left, right, up, down = inf, -inf, inf, -inf
@@ -111,4 +113,5 @@ class Tilemap:
         up *= self.tile_size
         down = (down + 1) * self.tile_size
         
-        return left, right, up, down 
+        return left, right, up, down
+    
