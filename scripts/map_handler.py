@@ -15,20 +15,19 @@ MAP_CHANGE_TILES = {"0": [((9, 14), "1", (16, -24))],
 ITEM_TYPES = {"00": items.Plaster,
               "01": items.Bandage,
               "02": items.MedicalKit,
-              "03": items.todo1,
-              "04": items.todo2,
+              "03": items.DuckLeg,
+              "04": items.RawMeat,
               "05": items.Shoes,
               "06": items.Jacket,
               "07": items.Blood,
-              "08": items.todo3,
-              "09": items.SmallBottle1,
-              "10": items.Bootle1,
+              "09": items.SmallAggressionPotion,
+              "10": items.AggressionPotion,
               "11": items.Flowers,
               "12": items.Clover,
-              "13": items.todo4,
+              "13": items.Stones,
               "14": items.Letter,
-              "15": items.SmallBottle2,
-              "16": items.Bottle2}
+              "15": items.SmallAgilityPotion,
+              "16": items.AgilityPotion}
 
 class MapHandler():
     def __init__(self, game, player):
@@ -61,6 +60,7 @@ class MapHandler():
                 self.player.pos = list(new_pos)
                 self.game.tilemap = self.get_curr_map()
                 self.game.camera.set_map(self.get_curr_map())
+                self.game.battle_detector.tilemap = self.get_curr_map()
                 
                 
     def load_items(self):

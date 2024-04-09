@@ -135,5 +135,4 @@ class Tilemap:
                 rect = pygame.Rect(0, 0, self.tile_size // 2, self.tile_size // 2)
                 rect.center = (x * self.tile_size + self.tile_size // 2, y * self.tile_size + self.tile_size // 2)
                 rects.append((x, y, rect))
-                # print(rect)
         return rects
