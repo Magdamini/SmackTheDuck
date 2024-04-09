@@ -1,5 +1,6 @@
 import pygame
 from enum import Enum
+from scripts.backpack import Backpack
 
 class PlayerActions(Enum):
     LEFT = 'left'
@@ -15,6 +16,7 @@ class Player:
         self.pos = list(pos)
         self.size = size
         self.running = False
+        self.backpack = Backpack()
         
         self.action = PlayerActions.UP
         self.update_action(PlayerActions.STANDING)

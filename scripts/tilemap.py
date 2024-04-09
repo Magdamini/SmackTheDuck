@@ -41,6 +41,7 @@ class Tilemap:
         self.game = game
         self.tile_size = tile_size
         self.tilemap = {}
+        self.items = {}
 
 
     def tiles_around(self, pos):
@@ -94,6 +95,8 @@ class Tilemap:
                 if loc in self.tilemap:
                     tile = self.tilemap[loc]
                     surf.blit(self.game.assets[tile['type']][tile['variant']], (tile['pos'][0] * self.tile_size - offset[0], tile['pos'][1] * self.tile_size - offset[1]))
+                if loc in self.items:
+                    self.items[loc].render(surf, offset)
         
 
     def get_bounds(self):
@@ -113,5 +116,24 @@ class Tilemap:
         up *= self.tile_size
         down = (down + 1) * self.tile_size
         
-        return left, right, up, down
+        return left, right, up, down 
     
+    def add_item(self, item_type, x, y):
+        new_item = item_type(x * self.tile_size, y * self.tile_size)
+        self.items[str(x) + ";" + str(y)] = new_item
+        
+    def get_item(self, x, y):
+        return self.items.pop(str(x) + ";" + str(y))
+    
+    def items_around(self, pos): 
+        rects = []
+        tile_loc = (int(pos[0] // self.tile_size), int(pos[1] // self.tile_size))
+        for offset in NEIGHBOR_OFFSETS:
+            x, y = tile_loc[0] + offset[0], tile_loc[1] + offset[1]
+            check_loc = str(x) + ';' + str(y)
+            if check_loc in self.items:
+                rect = pygame.Rect(0, 0, self.tile_size // 2, self.tile_size // 2)
+                rect.center = (x * self.tile_size + self.tile_size // 2, y * self.tile_size + self.tile_size // 2)
+                rects.append((x, y, rect))
+                # print(rect)
+        return rects

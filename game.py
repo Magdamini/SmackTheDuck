@@ -7,6 +7,8 @@ from scripts.tilemap import Tilemap
 from scripts.camera import Camera
 from scripts.battle_detector import Battle_detector
 from scripts.fighter import FightingPlayer
+from scripts.map_handler import MapHandler
+from scripts.item_collector import ItemCollector
 
 class Game:
     def __init__(self):        
@@ -62,15 +64,13 @@ class Game:
             'player/' + PlayerActions.LEFT.value: Animation(load_images('player/' + PlayerActions.LEFT.value))
         }
 
-        self.player = Player(self, (50, 50), (16, 16))
+        self.player = Player(self, (150, 150), (16, 16))
         
-        self.tilemap = Tilemap(self)
-
-        self.tilemap.load('data/maps/5.json')
+        self.map_handler = MapHandler(self, self.player)
+        self.tilemap = self.map_handler.get_curr_map()
         
-        # przy zmnianie mapy będzie trzeba uważać na kamerę bo tam dałam mapę jako atrybut
-        # po prostu jakiś szybki update czy coś, ale byle o tym pamiętać
         self.camera = Camera(self.display, self.player, self.tilemap)
+        self.item_collector = ItemCollector(self.player)
 
         self.fighting_player = FightingPlayer(["Ogłuszacz", "Lowkick", "Rzut ala precel", "Kijem między oczy"], 3)
         self.battle_detector = Battle_detector(self.player, self.fighting_player, self.tilemap)
@@ -78,10 +78,12 @@ class Game:
 
     def run(self):
         while True:
-            self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
-
             self.player.update(self.tilemap, (self.movement[1] - self.movement[0], self.movement[3] - self.movement[2]))
+            self.map_handler.change_map()
             self.camera.update()
+            self.item_collector.collect_items(self.tilemap)
+            
+            self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
 
             self.battle_detector.detect_battle()
             self.tilemap.render(self.display, self.camera.pos)
