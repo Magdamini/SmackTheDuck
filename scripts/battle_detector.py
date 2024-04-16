@@ -19,7 +19,7 @@ class Battle_detector:
                         Fighter("Wodniczka", ["Z dzioba"], randint(fighting_player.level-1, fighting_player.level+1))]
         
     
-    def battle_chances(self, chance_of_battle=15):
+    def battle_chances(self, chance_of_battle=0):
         rand_num = randint(0, 99)
         return rand_num < chance_of_battle
     

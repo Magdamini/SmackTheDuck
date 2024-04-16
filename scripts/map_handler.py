@@ -43,17 +43,17 @@ class MapHandler():
         self.load_items()
         
         self.curr_map = "0"
+        self.tile_size = self.get_curr_map().tile_size
         self.player = player
         
     def get_curr_map(self):
         return self.maps[self.curr_map]
     
     def change_map(self):
-        tile_size = self.get_curr_map().tile_size
         player_rect = self.player.rect()
         
         for loc, new_map, new_pos in MAP_CHANGE_TILES.get(self.curr_map, ()):
-            door_rect = pygame.Rect(loc[0] * tile_size, loc[1] * tile_size, tile_size, tile_size)
+            door_rect = pygame.Rect(loc[0] * self.tile_size, loc[1] * self.tile_size, self.tile_size, self.tile_size)
             
             if player_rect.colliderect(door_rect):
                 self.curr_map = new_map

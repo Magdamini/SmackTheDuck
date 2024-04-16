@@ -42,6 +42,7 @@ class Tilemap:
         self.tile_size = tile_size
         self.tilemap = {}
         self.items = {}
+        self.bounds = None
 
 
     def tiles_around(self, pos):
@@ -74,6 +75,7 @@ class Tilemap:
         map_data = load_json(path)
         self.tilemap = map_data['tilemap']
         self.tile_size = map_data['tile_size']
+        self.bounds = self.get_bounds()
 
 
     def physics_rects_around(self, pos):
@@ -116,7 +118,7 @@ class Tilemap:
         up *= self.tile_size
         down = (down + 1) * self.tile_size
         
-        return left, right, up, down 
+        return [left, right], [up, down] 
     
     def add_item(self, item_type, x, y):
         new_item = item_type(x * self.tile_size, y * self.tile_size)
@@ -132,7 +134,10 @@ class Tilemap:
             x, y = tile_loc[0] + offset[0], tile_loc[1] + offset[1]
             check_loc = str(x) + ';' + str(y)
             if check_loc in self.items:
-                rect = pygame.Rect(0, 0, self.tile_size // 2, self.tile_size // 2)
-                rect.center = (x * self.tile_size + self.tile_size // 2, y * self.tile_size + self.tile_size // 2)
+                rect = pygame.Rect(0, 0, self.tile_size // 2, 3 * self.tile_size // 4)
+                rect.centerx = x * self.tile_size + self.tile_size // 2
+                rect.bottom = y * self.tile_size + self.tile_size
                 rects.append((x, y, rect))
         return rects
+
+        

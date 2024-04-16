@@ -21,6 +21,7 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.movement = [False, False, False, False]
+        self.show_items = []
 
         self.assets = {
             'Cave': load_images('tiles/Cave'),
@@ -70,7 +71,7 @@ class Game:
         self.tilemap = self.map_handler.get_curr_map()
         
         self.camera = Camera(self.display, self.player, self.tilemap)
-        self.item_collector = ItemCollector(self.player)
+        self.item_collector = ItemCollector(self.player, self.map_handler.maps)
 
         self.fighting_player = FightingPlayer(["Ogłuszacz", "Lowkick", "Rzut ala precel", "Kijem między oczy"], 3)
         self.battle_detector = Battle_detector(self.player, self.fighting_player, self.tilemap)
@@ -78,7 +79,8 @@ class Game:
 
     def run(self):
         while True:
-            self.player.update(self.tilemap, (self.movement[1] - self.movement[0], self.movement[3] - self.movement[2]))
+            if not self.show_items:
+                self.player.update(self.tilemap, (self.movement[1] - self.movement[0], self.movement[3] - self.movement[2]))
             self.map_handler.change_map()
             self.camera.update()
             self.item_collector.collect_items(self.tilemap)
@@ -89,6 +91,8 @@ class Game:
             
             self.tilemap.render(self.display, self.camera.pos)
             self.player.render(self.display, self.camera.pos)
+            for item in self.show_items:
+                item.render(self.display)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -105,6 +109,13 @@ class Game:
                         self.movement[3] = True
                     if event.key == pygame.K_LSHIFT:
                         self.player.running = True
+                    if event.key == pygame.K_b:
+                        self.show_items.append(self.player.backpack)
+                    if event.key == pygame.K_q:
+                        self.show_items = []
+                        self.item_collector.new_random_items(3)
+                    if event.key == pygame.K_p:
+                        print(self.player.pos[0] // 16, self.player.pos[1] // 16)
                     
                 if event.type == pygame.KEYUP:
                     if event.key in (pygame.K_LEFT, pygame.K_a):
@@ -115,8 +126,9 @@ class Game:
                         self.movement[2] = False
                     if event.key in (pygame.K_DOWN, pygame.K_s):
                         self.movement[3] = False
-                    if event.key  == pygame.K_LSHIFT:
+                    if event.key == pygame.K_LSHIFT:
                         self.player.running = False
+                    
 
             self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0, 0))
             pygame.display.update()

@@ -3,11 +3,12 @@ class Camera:
         self.width = display.get_width()
         self.height = display.get_height()
         self.player = player
-        self.bounds = tilemap.get_bounds()
         self.pos = [0, 0]
         
+        self.bounds = tilemap.bounds[0] + tilemap.bounds[1]
+
+        
     def update(self):
-        # powinno wyłączać przesuwanie kamery dla małych map
 
         # left/right
         if self.bounds[1] - self.bounds[0] > self.width:
@@ -26,5 +27,5 @@ class Camera:
                 self.pos[1] = self.bounds[2]
 
     def set_map(self, tilemap):
-        self.bounds = tilemap.get_bounds()
+        self.bounds = tilemap.bounds[0] + tilemap.bounds[1]
         self.pos = [0, 0]

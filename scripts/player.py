@@ -23,7 +23,9 @@ class Player:
 
 
     def rect(self):
-        return pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
+        rect = pygame.Rect(self.pos[0], self.pos[1], self.size[0] - 2, self.size[1] // 2)
+        rect.center = (self.pos[0]  + self.size[0] // 2, self.pos[1] + 3 * self.size[1] // 4)
+        return rect
     
 
     def update_action(self, new_action):
@@ -47,7 +49,7 @@ class Player:
                     entity_rect.right = rect.left
                 if frame_movement[0] < 0:
                     entity_rect.left = rect.right
-                self.pos[0] = entity_rect.x
+                self.pos[0] = entity_rect.x - 1
 
         self.pos[1] += frame_movement[1] * is_running
         entity_rect = self.rect()
@@ -57,7 +59,7 @@ class Player:
                     entity_rect.bottom = rect.top
                 if frame_movement[1] < 0:
                     entity_rect.top = rect.bottom
-                self.pos[1] = entity_rect.y
+                self.pos[1] = entity_rect.y - self.size[1] // 2
              
         new_action = PlayerActions.STANDING   
         if movement[0] > 0: new_action = PlayerActions.RIGHT
