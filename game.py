@@ -1,14 +1,8 @@
-import sys
 import pygame
+from select_player_screen import SelectPlayerScreen
+from select_animal_screen import SelectAnimalScreen
+from game_states import GameStates
 
-from scripts.utils import load_image, load_images, Animation
-from scripts.player import Player, PlayerActions
-from scripts.tilemap import Tilemap
-from scripts.camera import Camera
-from scripts.battle_detector import Battle_detector
-from scripts.fighter import FightingPlayer
-from scripts.map_handler import MapHandler
-from scripts.item_collector import ItemCollector
 
 class Game:
     def __init__(self):        
@@ -19,120 +13,43 @@ class Game:
         self.display = pygame.Surface((320, 240))
 
         self.clock = pygame.time.Clock()
-
-        self.movement = [False, False, False, False]
-        self.show_items = []
-
-        self.assets = {
-            'Cave': load_images('tiles/Cave'),
-            'CaveOutside': load_images('tiles/CaveOutside'),
-            'CaveOutside00': load_images('tiles/CaveOutside/00'),
-            'CaveOutside01': load_images('tiles/CaveOutside/01'),
-            'CaveOutside02': load_images('tiles/CaveOutside/02'),
-            'GrassFloor': load_images('tiles/GrassFloor'),
-            'GrassGoose': load_images('tiles/GrassGoose'),
-            'GrassTrees': load_images('tiles/GrassTrees'),
-            'GrassTrees00': load_images('tiles/GrassTrees/00'),
-            'GrassTrees01': load_images('tiles/GrassTrees/01'),
-            'GrassBuildings': load_images('tiles/GrassBuildings'),
-            'GrassBuildings00': load_images('tiles/GrassBuildings/00'),
-            'GrassBuildings01': load_images('tiles/GrassBuildings/01'),
-            'GrassBuildings02': load_images('tiles/GrassBuildings/02'),
-            'GrassBuildings03': load_images('tiles/GrassBuildings/03'),
-            'GrassBuildings04': load_images('tiles/GrassBuildings/04'),
-            'GrassBushes': load_images('tiles/GrassBushes'),
-            'GrassDecor': load_images('tiles/GrassDecor'),
-            'GrassDecor00': load_images('tiles/GrassDecor/00'),
-            'GrassDecor02': load_images('tiles/GrassDecor/02'),
-            'GrassDecor03': load_images('tiles/GrassDecor/03'),
-            'GrassIndoorDecor': load_images('tiles/GrassIndoorDecor'),
-            'GrassIndoorDecor05': load_images('tiles/GrassIndoorDecor/05'),
-            'GrassIndoorDecor06': load_images('tiles/GrassIndoorDecor/06'),
-            'GrassIndoorDecor07': load_images('tiles/GrassIndoorDecor/07'),
-            'GrassIndoorDecor08': load_images('tiles/GrassIndoorDecor/08'),
-            'WaterFloor': load_images('tiles/WaterFloor'),
-            'WaterCatwalk': load_images('tiles/WaterCatwalk'),
-            'HouseFloor': load_images('tiles/HouseFloor'),
-            'HouseIndoor': load_images('tiles/HouseIndoor'),
-            'HouseIndoor00': load_images('tiles/HouseIndoor/00'),
-            'HouseIndoor01': load_images('tiles/HouseIndoor/01'),
-            'Items': load_images('tiles/Items'),
-            
-            'player/' + PlayerActions.STANDING.value: Animation(load_images('player/' + PlayerActions.STANDING.value)),
-            'player/' + PlayerActions.UP.value: Animation(load_images('player/' + PlayerActions.UP.value)),
-            'player/' + PlayerActions.DOWN.value: Animation(load_images('player/' + PlayerActions.DOWN.value)),
-            'player/' + PlayerActions.RIGHT.value: Animation(load_images('player/' + PlayerActions.RIGHT.value)),
-            'player/' + PlayerActions.LEFT.value: Animation(load_images('player/' + PlayerActions.LEFT.value))
-        }
-
-        self.player = Player(self, (150, 150), (16, 16))
         
-        self.map_handler = MapHandler(self, self.player)
-        self.tilemap = self.map_handler.get_curr_map()
+        self.game_state_manager = GameStateManager(GameStates.SELECT_PLAYER)
+        # self.map_screen = MapScreen(self.display, self.game_state_manager)
+        self.select_player_screen = SelectPlayerScreen(self.display, self.game_state_manager)
+        self.select_animal_screen = SelectAnimalScreen(self.display, self.game_state_manager, self)
         
-        self.camera = Camera(self.display, self.player, self.tilemap)
-        self.item_collector = ItemCollector(self.player, self.map_handler.maps)
-
-        self.fighting_player = FightingPlayer(["Ogłuszacz", "Lowkick", "Rzut ala precel", "Kijem między oczy"], 3)
-        self.battle_detector = Battle_detector(self.player, self.fighting_player, self.tilemap)
-
-
+        
+        
+        # tu trzeba dodawać stany, i od razu dodawaj do enuma w pliku game_states
+        # trzeba pilnować żeby w każdym stanie był 'exit'
+        self.states = {GameStates.SELECT_PLAYER: self.select_player_screen,
+                    #    GameStates.MAP: self.map_screen,
+                       GameStates.SELECT_ANIMAL: self.select_animal_screen}
+        
+        
     def run(self):
         while True:
-            if not self.show_items:
-                self.player.update(self.tilemap, (self.movement[1] - self.movement[0], self.movement[3] - self.movement[2]))
-            self.map_handler.change_map()
-            self.camera.update()
-            self.item_collector.collect_items(self.tilemap)
-            self.battle_detector.detect_battle()
             
-            self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
-
-            
-            self.tilemap.render(self.display, self.camera.pos)
-            self.player.render(self.display, self.camera.pos)
-            for item in self.show_items:
-                item.render(self.display)
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key in (pygame.K_LEFT, pygame.K_a):
-                        self.movement[0] = True
-                    if event.key in (pygame.K_RIGHT, pygame.K_d):
-                        self.movement[1] = True
-                    if event.key in (pygame.K_UP, pygame.K_w):
-                        self.movement[2] = True
-                    if event.key in (pygame.K_DOWN, pygame.K_s):
-                        self.movement[3] = True
-                    if event.key == pygame.K_LSHIFT:
-                        self.player.running = True
-                    if event.key == pygame.K_b:
-                        self.show_items.append(self.player.backpack)
-                    if event.key == pygame.K_q:
-                        self.show_items = []
-                        self.item_collector.new_random_items(3)
-                    if event.key == pygame.K_p:
-                        print(self.player.pos[0] // 16, self.player.pos[1] // 16)
-                    
-                if event.type == pygame.KEYUP:
-                    if event.key in (pygame.K_LEFT, pygame.K_a):
-                        self.movement[0] = False
-                    if event.key in (pygame.K_RIGHT, pygame.K_d):
-                        self.movement[1] = False
-                    if event.key in (pygame.K_UP, pygame.K_w):
-                        self.movement[2] = False
-                    if event.key in (pygame.K_DOWN, pygame.K_s):
-                        self.movement[3] = False
-                    if event.key == pygame.K_LSHIFT:
-                        self.player.running = False
-                    
-
+            self.states[self.game_state_manager.get_state()].run()
+ 
             self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0, 0))
             pygame.display.update()
             self.clock.tick(60)
+            
+            
+class GameStateManager:
+    def __init__(self, start_state):
+        self.curr_state = start_state
+        
+    def get_state(self):
+        return self.curr_state
+    
+    def set_state(self, state):
+        self.curr_state = state
+        
+        
+        
 
-
-Game().run()
+if __name__ == '__main__':
+    Game().run()

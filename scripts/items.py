@@ -1,4 +1,4 @@
-import pygame
+
 from scripts.utils import load_image
 
 
@@ -7,13 +7,12 @@ class Item:
         self.x = x
         self.y = y
         self.img_name = img
-        self.map_img = load_image(f'tiles/Items/{img}.png')
-        self.img = self.map_img
+        self.img = load_image(f'tiles/Items/{img}.png')
         self.name = name
 
         
     def render(self, surf, offset=(0,0)):
-        surf.blit(self.map_img, (self.x - offset[0], self.y - offset[1]))
+        surf.blit(self.img, (self.x - offset[0], self.y - offset[1]))
         
     
   
