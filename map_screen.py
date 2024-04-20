@@ -81,8 +81,7 @@ class MapScreen:
         self.item_collector.collect_items(self.tilemap)
         self.battle_detector.detect_battle()
         
-        self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
-
+        self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))
         
         self.tilemap.render(self.display, self.camera.pos)
         self.player.render(self.display, self.camera.pos)
@@ -125,12 +124,9 @@ class MapScreen:
                     self.player.running = False
                     
                     
-                    
     # def set_animal(self, animal_img):
     #     self.animal = Animal(animal_img)
         
     # def set_player(self, player):
     #     self.assets['player/' + player + "/" + PlayerActions.STANDING.value] = Animation(load_images('player/' + PlayerActions.STANDING.value))
     #     print(player)
-                  
-

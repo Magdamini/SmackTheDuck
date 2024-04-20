@@ -120,13 +120,16 @@ class Tilemap:
         
         return [left, right], [up, down] 
     
+
     def add_item(self, item_type, x, y):
         new_item = item_type(x * self.tile_size, y * self.tile_size)
         self.items[str(x) + ";" + str(y)] = new_item
-        
+
+
     def get_item(self, x, y):
         return self.items.pop(str(x) + ";" + str(y))
     
+
     def items_around(self, pos): 
         rects = []
         tile_loc = (int(pos[0] // self.tile_size), int(pos[1] // self.tile_size))
@@ -139,5 +142,3 @@ class Tilemap:
                 rect.bottom = y * self.tile_size + self.tile_size
                 rects.append((x, y, rect))
         return rects
-
-        

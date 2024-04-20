@@ -94,5 +94,3 @@ class FightingPlayer(Fighter):
         print("\nYou used ", chosen_move)
         other.health -= self.attack
         sleep(1)
-
-

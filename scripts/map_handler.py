@@ -46,9 +46,11 @@ class MapHandler():
         self.tile_size = self.get_curr_map().tile_size
         self.player = player
         
+
     def get_curr_map(self):
         return self.maps[self.curr_map]
     
+
     def change_map(self):
         player_rect = self.player.rect()
         

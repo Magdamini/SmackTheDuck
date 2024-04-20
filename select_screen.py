@@ -5,6 +5,7 @@ from scripts.utils import Button, load_image, text_image
 
 BUTTON_SIZE = [150, 60]
 
+
 class SelectScreen:
     def __init__(self, display, game_state_manager, options, next_state, title, size=80):
         self.display = display
@@ -26,7 +27,8 @@ class SelectScreen:
         self.curr_option = 0
         
         self.scroll = [False, False]
-        
+
+
     def run(self):
         self.display.fill((250, 250, 250))
         
@@ -39,8 +41,7 @@ class SelectScreen:
                     self.scroll[0] = True
                 if event.key == pygame.K_RIGHT:
                     self.scroll[1] = True
-        
-            
+                    
         self.update()
         
         self.button.render(self.display)
@@ -57,19 +58,23 @@ class SelectScreen:
             self.curr_option = (self.curr_option + 1) % len(self.options)
         if self.scroll[1]:
             self.curr_option = (self.curr_option - 1) % len(self.options)
-            
+
+
     def update_manager(self):
         if self.button.is_clicked():
             self.game_state_manager.set_state(self.next_state)
             return True
         return False
-            
+
+
     def render_desc(self):
         pass
     
+
     def get_selected_option(self):
         return self.options_str[self.curr_option]
     
+
     def render_title(self):
         self.display.blit(self.title, (self.display.get_width() // 2 - self.title.get_width() // 2, 10))
         self.display.blit(self.subtitle, (self.display.get_width() // 2 - self.subtitle.get_width() // 2, 15 + self.title.get_height()))

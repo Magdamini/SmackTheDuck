@@ -232,12 +232,14 @@ class ItemEditor:
     def place_item(self, pos):
         self.tilemap.add_item(ITEM_TYPES[it_list[self.curr_img]], pos[0], pos[1])
         
+
     def del_item(self, pos):
         try:
             self.tilemap.get_item(pos[0], pos[1])
         except:
             pass
         
+
     def save(self):
         path = "data/maps/items.json"
         it_dict = {}
@@ -253,6 +255,7 @@ class ItemEditor:
         file.close()
         print("File saved sucesfully!")
         
+
     def load_items(self):
         items_data = load_json("data/maps/items.json")
         for key in items_data:
@@ -261,7 +264,6 @@ class ItemEditor:
                 y = values["y"] 
                 item_type = ITEM_TYPES[values["type"]]
                 self.maps[key].add_item(item_type, x, y)
-        
         
         
 ItemEditor().run()
