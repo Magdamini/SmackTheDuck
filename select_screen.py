@@ -11,8 +11,8 @@ class SelectScreen:
         self.game_state_manager = game_state_manager 
         self.img_size = size
         self.next_state = next_state
-        self.title = text_image("SELECT " + title.upper(), 20)
-        self.subtitle = text_image("use arrows to change character", 10)
+        self.title = text_image("SELECT " + title.upper(), 20, "data/fonts/Retro.ttf")
+        self.subtitle = text_image("use arrows to change character", 10, "data/fonts/Retro.ttf")
         
         # TODO button
         self.button = Button(display.get_width() // 2 - BUTTON_SIZE[0] // 2, display.get_height() - BUTTON_SIZE[1] - 10, "select")

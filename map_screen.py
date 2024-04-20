@@ -53,13 +53,13 @@ class MapScreen:
             'Items': load_images('tiles/Items'),
             
             'player/' + PlayerActions.STANDING.value: Animation(load_images(f'player/{player_type}/' + PlayerActions.STANDING.value)),
-            'player/' + PlayerActions.UP.value: Animation(load_images('player/' + PlayerActions.UP.value)),
-            'player/' + PlayerActions.DOWN.value: Animation(load_images('player/' + PlayerActions.DOWN.value)),
-            'player/' + PlayerActions.RIGHT.value: Animation(load_images('player/' + PlayerActions.RIGHT.value)),
-            'player/' + PlayerActions.LEFT.value: Animation(load_images('player/' + PlayerActions.LEFT.value))
+            'player/' + PlayerActions.UP.value: Animation(load_images(f'player/{player_type}/' + PlayerActions.UP.value)),
+            'player/' + PlayerActions.DOWN.value: Animation(load_images(f'player/{player_type}/' + PlayerActions.DOWN.value)),
+            'player/' + PlayerActions.RIGHT.value: Animation(load_images(f'player/{player_type}/' + PlayerActions.RIGHT.value)),
+            'player/' + PlayerActions.LEFT.value: Animation(load_images(f'player/{player_type}/' + PlayerActions.LEFT.value))
         }
-
-        # TODO można nie ustawiać initial Animala bo i tak się potem zmieni
+        
+        
         self.player = Player(self, (150, 150), (16, 16))
         self.animal = Animal(animal_img)
         
@@ -105,7 +105,11 @@ class MapScreen:
                 if event.key == pygame.K_LSHIFT:
                     self.player.running = True
                 if event.key == pygame.K_b:
-                    self.show_items.append(self.player.backpack)
+                    if self.player.backpack in self.show_items:
+                        self.show_items.remove(self.player.backpack)
+                    else:
+                        self.show_items.append(self.player.backpack)
+                        
                 if event.key == pygame.K_q:
                     self.show_items = []
                     self.item_collector.new_random_items(3)
@@ -124,13 +128,6 @@ class MapScreen:
                 if event.key == pygame.K_LSHIFT:
                     self.player.running = False
                     
-                    
-                    
-    # def set_animal(self, animal_img):
-    #     self.animal = Animal(animal_img)
-        
-    # def set_player(self, player):
-    #     self.assets['player/' + player + "/" + PlayerActions.STANDING.value] = Animation(load_images('player/' + PlayerActions.STANDING.value))
-    #     print(player)
+
                   
 

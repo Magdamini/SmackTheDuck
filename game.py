@@ -41,6 +41,7 @@ class Game:
 class GameStateManager:
     def __init__(self, start_state):
         self.curr_state = start_state
+        self.scale = 2
         
     def get_state(self):
         return self.curr_state
