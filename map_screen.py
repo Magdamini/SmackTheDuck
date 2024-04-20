@@ -88,6 +88,10 @@ class MapScreen:
         self.player.render(self.display, self.camera.pos)
         for item in self.show_items:
             item.render(self.display)
+            
+            # TODO - do usunięcia -> możesz zobaczyć jak działa branie przedmiotów
+            if item == self.player.backpack:
+                item.get_clicked_item(self.display, self.game_state_manager.scale)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

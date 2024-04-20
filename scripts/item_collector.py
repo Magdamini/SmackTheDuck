@@ -80,18 +80,3 @@ class ItemCollector:
         
         return True    
         
-        
-        
-        
-    # def show_item(self, item):
-    #     self.display.blit(pygame.transform.scale(item.img, (item.big_size, item.big_size)), ((self.display.get_width() - item.big_size) // 2, (self.display.get_height() - item.big_size) // 2))
-        
-    #     font = pygame.font.SysFont(None, 25)
-    #     text = "New item found!"
-    #     img = font.render(text, True, (0, 0, 0))
-    #     text_rect = img.get_rect(center=(self.display.get_width()//2, (self.display.get_height() + item.big_size * 4 // 3) // 2))
-        
-    #     self.display.blit(img, text_rect)
-        
-    #     self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0, 0))
-    #     pygame.display.update()

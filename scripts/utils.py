@@ -25,7 +25,7 @@ def load_images(path):
             images.append(load_image(path + '/' + img_name))
     return images
 
-def text_image(text, size, font="data/fonts/Pokemon4.ttf", color=(0, 0, 0)):
+def text_image(text, size, font="data/fonts/Retro.ttf", color=(0, 0, 0)):
     text_font = pygame.font.Font(font, size)
     return text_font.render(text, True, color)
 
@@ -52,10 +52,14 @@ class Button():
         self.x = x
         self.y = y
         
-        self.img = load_image(f'buttons/{img}.png')
+        self.img = img
         self.size = self.img.get_size()
         self.changed = False
         self.clicked = True
+        
+    def set_pos(self, x, y):
+        self.x = x
+        self.y = y
         
     def render(self, surf, scale=2):
 
