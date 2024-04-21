@@ -1,7 +1,7 @@
 from scripts.tilemap import Tilemap
 import scripts.items as items
 from scripts.utils import load_json
-import pygame, json
+import pygame
 
 MAP_CHANGE_TILES = {"0": [((9, 14), "1", (16, -40))],
                     "1": [((1, -3.5), "0", (144, 208)), ((68.5, -8), "2", (8, 128))],
@@ -28,6 +28,7 @@ ITEM_TYPES = {"00": items.Plaster,
               "14": items.Letter,
               "15": items.SmallAgilityPotion,
               "16": items.AgilityPotion}
+
 
 class MapHandler():
     def __init__(self, game, player):
