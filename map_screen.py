@@ -7,10 +7,10 @@ from scripts.battle_detector import Battle_detector
 from scripts.fighter import FightingPlayer
 from scripts.map_handler import MapHandler
 from scripts.item_collector import ItemCollector
-from scripts.animal import Animal
+from scripts.level_manager import LevelManager
 
 class MapScreen:
-    def __init__(self, display, game_state_manager, animal_img, player_type):
+    def __init__(self, display, game_state_manager, animal, player_type):
         self.display = display
         self.game_state_manager = game_state_manager        
 
@@ -61,33 +61,52 @@ class MapScreen:
         
         
         self.player = Player(self, (150, 150), (16, 16))
-        self.animal = Animal(animal_img)
+        self.animal = animal
         
         self.map_handler = MapHandler(self, self.player)
         self.tilemap = self.map_handler.get_curr_map()
         
         self.camera = Camera(self.display, self.player, self.tilemap)
         self.item_collector = ItemCollector(self.player, self.map_handler.maps)
+        self.level_manager = LevelManager(self.animal, self.item_collector)
 
         self.fighting_player = FightingPlayer(["Ogłuszacz", "Lowkick", "Rzut ala precel", "Kijem między oczy"], 3)
         self.battle_detector = Battle_detector(self.player, self.fighting_player, self.tilemap)
 
 
     def run(self):
+        # update player pos
         if not self.show_items:
             self.player.update(self.tilemap, (self.movement[1] - self.movement[0], self.movement[3] - self.movement[2]))
-        self.map_handler.change_map()
-        self.camera.update()
+            self.map_handler.change_map()
+            self.camera.update()
+        
+        # battle
         self.item_collector.collect_items(self.tilemap)
         self.battle_detector.detect_battle()
+        # xp = battle_result
+        xp = 0
         
+        # update xp
+        new_lvl_window = self.level_manager.update(xp)
+        if new_lvl_window is not None:
+            self.show_items.append(new_lvl_window)
+            
+        
+        # render
         self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
 
         
         self.tilemap.render(self.display, self.camera.pos)
         self.player.render(self.display, self.camera.pos)
+        self.level_manager.render(self.display)
+        
+        
         for item in self.show_items:
             item.render(self.display)
+            if item != self.player.backpack:
+                if item.is_finished():
+                    self.show_items.remove(item)
             
             # TODO - do usunięcia -> możesz zobaczyć jak działa branie przedmiotów
             if item == self.player.backpack:
@@ -117,8 +136,12 @@ class MapScreen:
                 if event.key == pygame.K_q:
                     self.show_items = []
                     self.item_collector.new_random_items(3)
-                if event.key == pygame.K_p:
-                    print(self.player.pos[0] // 16, self.player.pos[1] // 16)
+                    
+                if event.key == pygame.K_x:
+                    print("+1 Xp")
+                    new_lvl_window = self.level_manager.update(1)
+                    if new_lvl_window is not None:
+                        self.show_items.append(new_lvl_window)
                 
             if event.type == pygame.KEYUP:
                 if event.key in (pygame.K_LEFT, pygame.K_a):
