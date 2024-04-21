@@ -15,11 +15,22 @@ QUESTIONS
 - ile przedmiotów ma się pojawiać jak wbije się nowy level?
 chcemy na to jakiś alg uwzględniający level, czy ma być to stała wartość?
 
+    --- Sprawa jest taka, bo my mamy w planch blokowac pewne mapy do danego poziomu, a skoro tak to nie ma sensu
+        zeby przedmioty spawnowaly sie wszedzie w grze. Moznaby zrobic tak, ze spwanuje sie stala ilosc przedmiotow na mape, czyli:
+        wyzszy poziom -> wiecej map -> wiecej przedmiotow do zebrania
+        z czasem bedzie coraz wiecej przedmiotow co ma sens moim zdaniem
+
 - to samo pytanie o update statystyk: czy zawsze o stałą wartość czy coś kombinujemy?
+
+    --- Statystki myślę, że na pewno o stałą
+
 - na razie jest zakodzone, że można upgrade-ować jedną statystykę co level, wydaje mi się że to jednak jest za mało
 także nie wiem wsm jak to rozwiązać, może jakiś stały update tych najważniejszych statystyk (atak, obrona, zdrowie) zawsze co level?
 Ogólnie to chyba jeszcze kwestia ustalenia jak dokładnie ma to działać w bitwie i wtedy mi powiesz które można kiedy ulepszać i o ile
 Albo opcja że u NPC się również będzie można ulepszyć, np. raz na level -> wydaje mi się spoko pomysł
+
+    --- Dobreeeee. Mega podoba mi sie pomysl z ulepszaniem sie u NPC. Co ty na to, zeby
+        najwazniejsze staty zawsze +1 co level i 3 pkty wybranych stat przez gracza za kazdy nabity lvl (u NPC)?
 
 ----------------------------------------------------------------------
 Rzeczy wstawione roboczo:
@@ -46,7 +57,3 @@ Level-e w firmie <lvl> <xp potrzeby do wbicia kolejnego> (resetuję xp do zera p
 13 254
 14 300
 15 MAX
-
-
-
-
