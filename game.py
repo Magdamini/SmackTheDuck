@@ -1,6 +1,7 @@
 import pygame
 from select_player_screen import SelectPlayerScreen
 from select_animal_screen import SelectAnimalScreen
+from start_screen import StartScreen
 # from map_screen import MapScreen
 from game_states import GameStates
 
@@ -15,15 +16,17 @@ class Game:
 
         self.clock = pygame.time.Clock()
         
-        self.game_state_manager = GameStateManager(GameStates.SELECT_PLAYER)
+        self.game_state_manager = GameStateManager(GameStates.START)
         # self.map_screen = MapScreen(self.display, self.game_state_manager, "animals/11.png", "basic")
+        self.start_screen = StartScreen(self.display, self.game_state_manager)
         self.select_player_screen = SelectPlayerScreen(self.display, self.game_state_manager)
         self.select_animal_screen = SelectAnimalScreen(self.display, self.game_state_manager, self)
         
         # tu trzeba dodawać stany, i od razu dodawaj do enuma w pliku game_states
         # trzeba pilnować żeby w każdym stanie był 'exit'
-        self.states = {GameStates.SELECT_PLAYER: self.select_player_screen,
-                    #    GameStates.MAP: self.map_screen,
+        self.states = {GameStates.START: self.start_screen,
+                       GameStates.SELECT_PLAYER: self.select_player_screen,
+                    #   GameStates.MAP: self.map_screen,
                        GameStates.SELECT_ANIMAL: self.select_animal_screen}
         
         

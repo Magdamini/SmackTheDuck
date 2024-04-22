@@ -10,6 +10,7 @@ class PlayerActions(Enum):
     STANDING = 'standing'
     
 
+# TODO Dziedziczenie z fighter?
 class Player:
     def __init__(self, game, pos, size):
         self.game = game
