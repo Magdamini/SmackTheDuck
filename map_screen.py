@@ -15,7 +15,6 @@ class MapScreen:
         self.game_state_manager = game_state_manager        
 
         self.movement = [False, False, False, False]
-        self.show_items = []
 
         self.assets = {
             'Cave': load_images('tiles/Cave'),
@@ -73,7 +72,6 @@ class MapScreen:
         self.fighting_player = FightingPlayer(["Ogłuszacz", "Lowkick", "Rzut ala precel", "Kijem między oczy"], 3)
         self.battle_detector = Battle_detector(self.player, self.fighting_player, self.tilemap)
         
-        self.pause_player = False
         self.show_backpack = False
         self.show_animal_stats = False
         self.new_level_window = None
@@ -97,7 +95,6 @@ class MapScreen:
         new_lvl = self.level_manager.update(xp, self.map_handler.maps)
         if new_lvl is not None:
             self.new_level_window = new_lvl
-            self.pause_player = True
             
         
         # render
@@ -143,12 +140,13 @@ class MapScreen:
                     self.show_animal_stats = False
                     
                 if event.key == pygame.K_x:
-                    xp = 5
-                    print(f"+{xp} Xp")
-                    new_lvl = self.level_manager.update(xp, self.map_handler.maps)
-                    if new_lvl is not None:
-                        self.new_level_window = new_lvl
-                        self.pause_player = True
+                    if not self.is_player_paused():
+                        xp = 5
+                        print(f"+{xp} Xp")
+                        new_lvl = self.level_manager.update(xp, self.map_handler.maps)
+                        if new_lvl is not None:
+                            self.new_level_window = new_lvl
+                            self.pause_player = True
                 
                 
             if event.type == pygame.KEYUP:
@@ -169,7 +167,6 @@ class MapScreen:
             self.new_level_window.render(self.display, self.game_state_manager.scale)
             if self.new_level_window.is_finished():
                 self.new_level_window = None
-                self.pause_player = False
                 
         elif self.show_backpack:
             self.player.backpack.render(self.display)

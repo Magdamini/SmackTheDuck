@@ -40,7 +40,7 @@ class LevelManager:
         next_xp = self.xp_to_next_level(self.level)
         
         xp_curr = pygame.Rect(xp_bar.x, xp_bar.y, int(self.xp / next_xp * self.bar_width), self.bar_height)  
-        pygame.draw.rect(surf, (77, 77, 77), xp_bar)
+        pygame.draw.rect(surf, (100, 100, 100), xp_bar)
         pygame.draw.rect(surf, (105, 245, 66), xp_curr)
         pygame.draw.rect(surf, (0,0,0), xp_bar, width=1)
         

@@ -25,7 +25,6 @@ Albo opcja że u NPC się również będzie można ulepszyć, np. raz na level -
 Rzeczy wstawione roboczo:
 - print przy zdobywaniu przedmiotu
 - usuwanie przedmiotów z plecaka w trakcie chodzenia po mapie
-- generowanie itemów pod 'q'
 - print przy generowaniu itemów
 - dodawanie xp pod 'x'
 

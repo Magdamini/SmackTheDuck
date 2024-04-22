@@ -37,11 +37,11 @@ class Animal:
         curr_y = background.y + 8
         
         big_text_font = pygame.font.Font("data/fonts/Retro.ttf", size=16)
-        lvl_text = big_text_font.render("Player Statistics", True, "black")
-        surf.blit(lvl_text, (background.centerx - lvl_text.get_width() // 2, curr_y))
+        title_text = big_text_font.render("Pet Statistics", True, "black")
+        surf.blit(title_text, (background.centerx - title_text.get_width() // 2, curr_y))
         left = background.x + self.border_offset
         
-        curr_y += 5 + lvl_text.get_height()
+        curr_y += 5 + title_text.get_height()
         
         line_offset = 3
         pygame.draw.line(surf, (0, 0, 0), (left - line_offset, curr_y), (background.right - self.border_offset + line_offset, curr_y))
