@@ -72,11 +72,17 @@ class MapScreen:
 
         self.fighting_player = FightingPlayer(["Ogłuszacz", "Lowkick", "Rzut ala precel", "Kijem między oczy"], 3)
         self.battle_detector = Battle_detector(self.player, self.fighting_player, self.tilemap)
+        
+        self.pause_player = False
+        self.show_backpack = False
+        self.show_animal_stats = False
+        self.new_level_window = None
+        
 
 
     def run(self):
         # update player pos
-        if not self.show_items:
+        if not self.is_player_paused():
             self.player.update(self.tilemap, (self.movement[1] - self.movement[0], self.movement[3] - self.movement[2]))
             self.map_handler.change_map()
             self.camera.update()
@@ -88,9 +94,10 @@ class MapScreen:
         xp = 0
         
         # update xp
-        new_lvl_window = self.level_manager.update(xp)
-        if new_lvl_window is not None:
-            self.show_items.append(new_lvl_window)
+        new_lvl = self.level_manager.update(xp, self.map_handler.maps)
+        if new_lvl is not None:
+            self.new_level_window = new_lvl
+            self.pause_player = True
             
         
         # render
@@ -101,16 +108,8 @@ class MapScreen:
         self.player.render(self.display, self.camera.pos)
         self.level_manager.render(self.display)
         
+        self.render_extra_window()
         
-        for item in self.show_items:
-            item.render(self.display)
-            if item != self.player.backpack:
-                if item.is_finished():
-                    self.show_items.remove(item)
-            
-            # TODO - do usunięcia -> możesz zobaczyć jak działa branie przedmiotów
-            if item == self.player.backpack:
-                item.get_clicked_item(self.display, self.game_state_manager.scale)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -128,20 +127,29 @@ class MapScreen:
                 if event.key == pygame.K_LSHIFT:
                     self.player.running = True
                 if event.key == pygame.K_b:
-                    if self.player.backpack in self.show_items:
-                        self.show_items.remove(self.player.backpack)
-                    else:
-                        self.show_items.append(self.player.backpack)
+                    if not self.show_backpack and not self.is_player_paused():
+                        self.show_backpack = True
+                    elif self.show_backpack:
+                        self.show_backpack = False
+                        
+                if event.key == pygame.K_v:
+                    if not self.show_animal_stats and not self.is_player_paused():
+                        self.show_animal_stats = True
+                    elif self.show_animal_stats:
+                        self.show_animal_stats = False
                         
                 if event.key == pygame.K_q:
-                    self.show_items = []
-                    self.item_collector.new_random_items(3)
+                    self.show_backpack = False
+                    self.show_animal_stats = False
                     
                 if event.key == pygame.K_x:
-                    print("+1 Xp")
-                    new_lvl_window = self.level_manager.update(1)
-                    if new_lvl_window is not None:
-                        self.show_items.append(new_lvl_window)
+                    xp = 5
+                    print(f"+{xp} Xp")
+                    new_lvl = self.level_manager.update(xp, self.map_handler.maps)
+                    if new_lvl is not None:
+                        self.new_level_window = new_lvl
+                        self.pause_player = True
+                
                 
             if event.type == pygame.KEYUP:
                 if event.key in (pygame.K_LEFT, pygame.K_a):
@@ -154,6 +162,29 @@ class MapScreen:
                     self.movement[3] = False
                 if event.key == pygame.K_LSHIFT:
                     self.player.running = False
+                    
+                    
+    def render_extra_window(self):
+        if self.new_level_window is not None:
+            self.new_level_window.render(self.display, self.game_state_manager.scale)
+            if self.new_level_window.is_finished():
+                self.new_level_window = None
+                self.pause_player = False
+                
+        elif self.show_backpack:
+            self.player.backpack.render(self.display)
+            
+            # TODO - do usunięcia -> możesz zobaczyć jak działa branie przedmiotów
+            self.player.backpack.get_clicked_item(self.display, self.game_state_manager.scale)
+            
+        elif self.show_animal_stats:
+            self.animal.render_statistics(self.display)
+            
+    
+    
+    def is_player_paused(self):
+        return self.show_backpack or self.show_animal_stats or self.new_level_window is not None
+        
                     
 
                   
