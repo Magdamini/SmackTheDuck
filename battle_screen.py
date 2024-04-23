@@ -106,6 +106,7 @@ class BattleScreen():
         self.enemy = Enemy(rand_enemy_img, health, attack, defence, critical_dmg, agility, luck, rand_enemy_moves, level=level)
         self.enemy.battle_stats = self.enemy.stats.copy()
 
+
     def render_battle_statistics(self, surf, stats, x, y):
         background = pygame.Rect(x, y, self.width_battle, self.height_battle)
         # background.center = (surf.get_width() // 2, surf.get_height() // 2)

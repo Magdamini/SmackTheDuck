@@ -6,8 +6,8 @@ from map_screen import MapScreen
 from scripts.animal import Animal
 
 #[*attack, -defence, -stats]
-MOVES = {"animals/cat.png": {"bite": [1, 0, 0], "hiss": [0, 0, 1], "jump_attack": [0.8, 2, 0], "scratch": [0.5, 10, 0]},
-         "animals/dog.png": {"bite": [1, 0, 0], "bark": [0, 0, 1], "jump_attack": [0.8, 2, 0], "trample": [0.5, 10, 0]}}
+MOVES = {"animals/cat.png": {"bite": [1, 0, 0], "hiss": [0, 0, 1], "jump_attack": [0.8, 2, 0], "scratch": [0.6, 7, 0]},
+         "animals/dog.png": {"bite": [1.2, 0, 0], "bark": [0, 0, 1], "jump_attack": [0.8, 2, 0], "trample": [0.5, 10, 0]}}
 
 
 class SelectAnimalScreen(SelectScreen):
