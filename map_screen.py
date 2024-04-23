@@ -1,5 +1,7 @@
 import pygame, sys
 
+from battle_screen import BattleScreen
+from game_states import GameStates
 from scripts.utils import load_images, Animation
 from scripts.player import Player, PlayerActions
 from scripts.camera import Camera
@@ -9,12 +11,12 @@ from scripts.item_collector import ItemCollector
 from scripts.level_manager import LevelManager
 
 class MapScreen:
-    def __init__(self, display, game_state_manager, animal, player_type):
+    def __init__(self, display, game_state_manager, animal, player_type, game):
         self.display = display
-        self.game_state_manager = game_state_manager        
+        self.game_state_manager = game_state_manager
+        self.game = game
 
         self.movement = [False, False, False, False]
-        self.show_items = []
 
         self.assets = {
             'Cave': load_images('tiles/Cave'),
@@ -70,21 +72,36 @@ class MapScreen:
 
         self.battle_detector = Battle_detector(self.game_state_manager, self.player, self.tilemap)
 
+        self.show_backpack = False
+        self.show_animal_stats = False
+        self.new_level_window = None
+
+        self.had_battle = False
+
+
     def run(self):
         # update player pos
-        if not self.show_items:
+        if not self.is_player_paused():
             self.player.update(self.tilemap, (self.movement[1] - self.movement[0], self.movement[3] - self.movement[2]))
             self.map_handler.change_map()
             self.camera.update()
         
         self.item_collector.collect_items(self.tilemap)
         # battle
-        xp = self.handle_battle()
+        xp = 0
+        if self.had_battle:
+            xp = self.animal.xp_gained
+            self.animal.xp_gained = 0
+            self.had_battle = False
+
+        if self.handle_battle():
+            self.had_battle = True
         
         # update xp
-        new_lvl_window = self.level_manager.update(xp)
-        if new_lvl_window is not None:
-            self.show_items.append(new_lvl_window)            
+        new_lvl = self.level_manager.update(xp, self.map_handler.maps)
+        if new_lvl is not None:
+            self.new_level_window = new_lvl
+            
         
         # render
         self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
@@ -92,16 +109,8 @@ class MapScreen:
         self.tilemap.render(self.display, self.camera.pos)
         self.player.render(self.display, self.camera.pos)
         self.level_manager.render(self.display)
-        
-        for item in self.show_items:
-            item.render(self.display)
-            if item != self.player.backpack:
-                if item.is_finished():
-                    self.show_items.remove(item)
-            
-            # TODO - do usunięcia -> możesz zobaczyć jak działa branie przedmiotów
-            if item == self.player.backpack:
-                item.get_clicked_item(self.display, self.game_state_manager.scale)
+
+        self.render_extra_window()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -118,21 +127,35 @@ class MapScreen:
                     self.movement[3] = True
                 if event.key == pygame.K_LSHIFT:
                     self.player.running = True
+
                 if event.key == pygame.K_b:
-                    if self.player.backpack in self.show_items:
-                        self.show_items.remove(self.player.backpack)
-                    else:
-                        self.show_items.append(self.player.backpack)
+                    if not self.show_backpack and not self.is_player_paused():
+                        self.show_backpack = True
+                    elif self.show_backpack:
+                        self.show_backpack = False
+                        
+                if event.key == pygame.K_v:
+                    if not self.show_animal_stats and not self.is_player_paused():
+                        self.show_animal_stats = True
+                    elif self.show_animal_stats:
+                        self.show_animal_stats = False
                         
                 if event.key == pygame.K_q:
-                    self.show_items = []
-                    self.item_collector.new_random_items(3)
+                    self.show_backpack = False
+                    self.show_animal_stats = False
                     
                 if event.key == pygame.K_x:
-                    print("+1 Xp")
-                    new_lvl_window = self.level_manager.update(1)
-                    if new_lvl_window is not None:
-                        self.show_items.append(new_lvl_window)
+                    if not self.is_player_paused():
+                        xp = 5
+                        print(f"+{xp} Xp")
+                        new_lvl = self.level_manager.update(xp, self.map_handler.maps)
+                        if new_lvl is not None:
+                            self.new_level_window = new_lvl
+                            self.pause_player = True
+                
+                if event.key == pygame.K_ESCAPE:
+                    self.game_state_manager.set_state(GameStates.END)
+                          
                 
             if event.type == pygame.KEYUP:
                 if event.key in (pygame.K_LEFT, pygame.K_a):
@@ -145,10 +168,31 @@ class MapScreen:
                     self.movement[3] = False
                 if event.key == pygame.K_LSHIFT:
                     self.player.running = False
+        
+    
+    def render_extra_window(self):
+        if self.new_level_window is not None:
+            self.new_level_window.render(self.display, self.game_state_manager.scale)
+            if self.new_level_window.is_finished():
+                self.new_level_window = None
+                
+        elif self.show_backpack:
+            self.player.backpack.render(self.display)
+            
+            # TODO - do usunięcia -> możesz zobaczyć jak działa branie przedmiotów
+            self.player.backpack.get_clicked_item(self.display, self.game_state_manager.scale)
+            
+        elif self.show_animal_stats:
+            self.animal.render_statistics(self.display)
+
+
+    def is_player_paused(self):
+        return self.show_backpack or self.show_animal_stats or self.new_level_window is not None
 
 
     def handle_battle(self):
         if self.battle_detector.detect_battle():
+            self.game.states[GameStates.BATTLE] = BattleScreen(self.display, self.game_state_manager, self.animal)
             self.movement = [False, False, False, False]
-            return 1
-        return 0
+            return True
+        return False

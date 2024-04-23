@@ -31,6 +31,13 @@ def text_image(text, size, font="data/fonts/Retro.ttf", color=(0, 0, 0)):
     return text_font.render(text, True, color)
 
 
+def get_filename_without_extension(path):
+    filename = os.path.basename(path)
+    # Usunięcie rozszerzenia pliku
+    filename_without_extension = os.path.splitext(filename)[0]    
+    return filename_without_extension
+
+
 class Animation:
     def __init__(self, images, duration=5):
         self.images = images

@@ -25,10 +25,10 @@ class Battle_detector:
             self.previous_tile_loc = self.tile_loc
             check_loc = str(self.tile_loc[0]) + ';' + str(self.tile_loc[1])
             if check_loc in self.tilemap.tilemap and self.tilemap.tilemap[check_loc]['type'] in FIGHT_TILES and self.battle_chances():
-                return self.update_manager()
+                self.update_manager()
+                return True
         return False
 
 
-    def update_manager(self, state=GameStates.BATTLE):
+    def update_manager(self):
         self.game_state_manager.set_state(GameStates.BATTLE)
-        return True

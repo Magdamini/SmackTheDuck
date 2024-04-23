@@ -9,7 +9,6 @@ class EndScreen():
     def __init__(self, display, game_state_manager):
         self.display = display
         self.game_state_manager = game_state_manager
-        self.next_state = GameStates.SELECT_PLAYER
         self.title = text_image("Thank you \n for playing our game", 20, "data/fonts/Retro.ttf")
         self.subtitle = text_image("Credits \n Magdalena Pabisz - everything \n Olgierd Smyka - everything as well", 10, "data/fonts/Retro.ttf")
 
@@ -22,7 +21,11 @@ class EndScreen():
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                self.update_manager()
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+                else:
+                    self.update_manager()
 
         self.render_title()
 
@@ -31,7 +34,7 @@ class EndScreen():
     
 
     def update_manager(self):
-        self.game_state_manager.set_state(self.next_state)
+        self.game_state_manager.set_state(GameStates.MAP)
         return True
 
 

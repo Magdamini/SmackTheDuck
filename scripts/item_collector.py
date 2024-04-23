@@ -6,13 +6,7 @@ from scripts.tilemap import PHYSICS_TILES
 class ItemCollector:
     def __init__(self, player, maps):
         self.player = player
-        self.maps = maps
         
-        sizes = [((m.bounds[0][1] - m.bounds[0][0]) * (m.bounds[1][1] - m.bounds[1][0]), k) for k, m in maps.items() if k != "5a"]
-        mini = float('inf')
-        for s, _ in sizes:
-            mini = min(s, mini)
-        self.scale = [(s // mini, k) for s, k in sizes]
         self.item_list = list(ITEM_TYPES.keys())
         self.item_list.remove("14")
         
@@ -29,31 +23,36 @@ class ItemCollector:
                 
     # maps -> słownik map z map_handlera
     # w jaskini bossa się nic nie pojawia
-    def new_random_items(self, no_new_items=1):
-        sum_size = sum([s[0] for s in self.scale])
+    def new_random_items(self, available_maps, no_new_items=1):
+        sizes = [((m.bounds[0][1] - m.bounds[0][0]) * (m.bounds[1][1] - m.bounds[1][0]), k) for k, m in available_maps.items()]
+        mini = float('inf')
+        for s, _ in sizes:
+            mini = min(s, mini)
+        scale = [(s // mini, k) for s, k in sizes]
+        
+        sum_size = sum([s[0] for s in scale])
         
         for _ in range(no_new_items):
             rand = random.randint(1, sum_size)
             curr = 0
-            total_scale = self.scale[0][0]
+            total_scale = scale[0][0]
             while rand > total_scale:
                 curr += 1
-                total_scale += self.scale[curr][0]
+                total_scale += scale[curr][0]
                 
-            curr_map = self.maps[self.scale[curr][1]]
-            print(self.scale[curr][1])
+            curr_map = available_maps[scale[curr][1]]
             
             while True:
                 x = random.randint(curr_map.bounds[0][0] // curr_map.tile_size, curr_map.bounds[0][1] // curr_map.tile_size - 1)
                 y = random.randint(curr_map.bounds[1][0] // curr_map.tile_size, curr_map.bounds[1][1] // curr_map.tile_size - 1)
-                if self.is_valid_pos(curr_map, self.scale[curr][1], x, y):
+                if self.is_valid_pos(curr_map, scale[curr][1], x, y):
                     break
                 
             new_item_type = random.choice(self.item_list)
             curr_map.add_item(ITEM_TYPES[new_item_type], x, y)
             
             # TODO - usunąć printa
-            print(f"added new item map:{self.scale[curr][1]}; x: {x}, y: {y}")
+            print(f"added new item map:{scale[curr][1]}; x: {x}, y: {y}")
             
             
                 
