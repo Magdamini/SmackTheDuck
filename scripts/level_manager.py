@@ -55,6 +55,7 @@ class LevelManager:
         self.xp = max(0, self.xp + xp)
         if self.xp >= self.xp_to_next_level(self.level):
             self.level += 1
+            self.animal.lvl = self.level
             
             if self.level == MAX_LVL: self.xp = self.xp_to_next_level(self.level)
             else: self.xp = 0
