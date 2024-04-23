@@ -35,7 +35,7 @@ class BattleScreen():
         self.border_width_battle = 2
         self.border_offset_battle = 4
 
-        self.cooldown = 0
+        self.cooldown = time() + 1
 
 
     def run(self):
@@ -70,6 +70,7 @@ class BattleScreen():
                                 self.animal.xp_gained = -self.enemy.lvl
                                 self.update_manager()
                                 self.enemy = None
+                                print("Enemy won")
                                 return
                             else:
                                 self.player_turn = not(self.player_turn)
@@ -80,6 +81,7 @@ class BattleScreen():
                                 self.animal.xp_gained = self.enemy.lvl
                                 self.update_manager()
                                 self.enemy = None
+                                print("Player won")
                                 return
                             else:
                                 self.player_turn = not(self.player_turn)
@@ -95,6 +97,7 @@ class BattleScreen():
                         self.animal.xp_gained = self.enemy.lvl
                         self.update_manager()
                         self.enemy = None
+                        print("Player won")
                         return
                     else:
                         self.player_turn = not(self.player_turn)
@@ -105,6 +108,7 @@ class BattleScreen():
                         self.animal.xp_gained = -self.enemy.lvl
                         self.update_manager()
                         self.enemy = None
+                        print("Enemy won")
                         return
                     else:
                         self.player_turn = not(self.player_turn)

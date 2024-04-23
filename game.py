@@ -26,11 +26,10 @@ class Game:
         self.select_animal_screen = SelectAnimalScreen(self.display, self.game_state_manager, self)
         self.end_screen = EndScreen(self.display, self.game_state_manager)
         
-        # tu trzeba dodawać stany, i od razu dodawaj do enuma w pliku game_states
         # trzeba pilnować żeby w każdym stanie był 'exit'
         self.states = {GameStates.START: self.start_screen,
                        GameStates.SELECT_PLAYER: self.select_player_screen,
-                    #    GameStates.BATTLE: self.battle_screen,
+                    #   GameStates.BATTLE: self.battle_screen,
                     #   GameStates.MAP: self.map_screen,
                        GameStates.SELECT_ANIMAL: self.select_animal_screen,
                        GameStates.END: self.end_screen}
