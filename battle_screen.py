@@ -62,28 +62,52 @@ class BattleScreen():
 
                 for num, button in self.attack_buttons.items():
                     if button.is_clicked():
-                        player_won = self.animal.perform_attack(self.enemy, self.list_of_moves[num])
-                        self.cooldown = time() + 1
-                        if player_won:
-                            self.animal.xp_gained = self.enemy.lvl
-                            self.update_manager()
-                            self.enemy = None
-                            return
+                        if self.enemy.battle_stats[Stats.LUCK] * 5 > randint(0, 99):
+                            print("Enemy's luck")
+                            enemy_won = self.animal.perform_attack(self.animal, self.list_of_moves[num])
+                            self.cooldown = time() + 1
+                            if enemy_won:
+                                self.animal.xp_gained = -self.enemy.lvl
+                                self.update_manager()
+                                self.enemy = None
+                                return
+                            else:
+                                self.player_turn = not(self.player_turn)
                         else:
-                            self.player_turn = not(self.player_turn)
-                            break
+                            player_won = self.animal.perform_attack(self.enemy, self.list_of_moves[num])
+                            self.cooldown = time() + 1
+                            if player_won:
+                                self.animal.xp_gained = self.enemy.lvl
+                                self.update_manager()
+                                self.enemy = None
+                                return
+                            else:
+                                self.player_turn = not(self.player_turn)
+                                break
 
             else:
                 self.wait_button.render(self.display)
-                enemy_won = self.enemy.perform_attack(self.animal, list(self.enemy.moves.keys())[randint(0, len(self.enemy.moves.keys())-1)])
-                self.cooldown = time() + 1
-                if enemy_won:
-                    self.animal.xp_gained = -self.enemy.lvl
-                    self.update_manager()
-                    self.enemy = None
-                    return
+                if self.animal.battle_stats[Stats.LUCK] * 5 > randint(0, 99):
+                    print("Player's luck")
+                    player_won = self.enemy.perform_attack(self.enemy, list(self.enemy.moves.keys())[randint(0, len(self.enemy.moves.keys())-1)])
+                    self.cooldown = time() + 1
+                    if player_won:
+                        self.animal.xp_gained = self.enemy.lvl
+                        self.update_manager()
+                        self.enemy = None
+                        return
+                    else:
+                        self.player_turn = not(self.player_turn)
                 else:
-                    self.player_turn = not(self.player_turn)
+                    enemy_won = self.enemy.perform_attack(self.animal, list(self.enemy.moves.keys())[randint(0, len(self.enemy.moves.keys())-1)])
+                    self.cooldown = time() + 1
+                    if enemy_won:
+                        self.animal.xp_gained = -self.enemy.lvl
+                        self.update_manager()
+                        self.enemy = None
+                        return
+                    else:
+                        self.player_turn = not(self.player_turn)
         else:
             self.wait_button.render(self.display)
 
