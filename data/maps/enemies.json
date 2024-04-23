@@ -1,2 +1,2 @@
-{"enemies/gadwall.png": {"attack": 1},
-"enemies/goose.png": {"attack": 1}}
+{"enemies/gadwall.png": {"attack": [1, 0, 0]},
+"enemies/goose.png": {"attack": [1, 0, 0]}}
