@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class Stats(Enum):
     HEALTH = "Health"
     ATTACK = "Attack"
@@ -7,4 +8,3 @@ class Stats(Enum):
     CRITICAL_DMG = "Critical damage"
     AGILITY = "Agility"
     LUCK = "Luck"
-

@@ -5,4 +5,5 @@ class GameStates(Enum):
     START = auto()
     SELECT_PLAYER = auto()
     SELECT_ANIMAL = auto()
-    # END = auto()
+    END = auto()
+    BATTLE = auto()

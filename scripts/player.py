@@ -8,9 +8,8 @@ class PlayerActions(Enum):
     UP = 'up'
     DOWN = 'down'
     STANDING = 'standing'
-    
 
-# TODO Dziedziczenie z fighter?
+
 class Player:
     def __init__(self, game, pos, size):
         self.game = game
@@ -75,4 +74,3 @@ class Player:
 
     def render(self, surf, offset=(0,0)):
         surf.blit(self.animation.get_img(), (self.pos[0] - offset[0], self.pos[1] - offset[1]))
-    

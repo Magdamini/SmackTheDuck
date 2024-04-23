@@ -1,10 +1,9 @@
-import pygame,sys
+import pygame, sys
 
 from scripts.utils import load_images, Animation
 from scripts.player import Player, PlayerActions
 from scripts.camera import Camera
 from scripts.battle_detector import Battle_detector
-from scripts.fighter import FightingPlayer
 from scripts.map_handler import MapHandler
 from scripts.item_collector import ItemCollector
 from scripts.level_manager import LevelManager
@@ -69,9 +68,7 @@ class MapScreen:
         self.item_collector = ItemCollector(self.player, self.map_handler.maps)
         self.level_manager = LevelManager(self.animal, self.item_collector)
 
-        self.fighting_player = FightingPlayer(["Ogłuszacz", "Lowkick", "Rzut ala precel", "Kijem między oczy"], 3)
-        self.battle_detector = Battle_detector(self.player, self.fighting_player, self.tilemap)
-
+        self.battle_detector = Battle_detector(self.game_state_manager, self.player, self.tilemap)
 
     def run(self):
         # update player pos
@@ -80,11 +77,9 @@ class MapScreen:
             self.map_handler.change_map()
             self.camera.update()
         
-        # battle
         self.item_collector.collect_items(self.tilemap)
-        self.battle_detector.detect_battle()
-        # xp = battle_result
-        xp = 0
+        # battle
+        xp = self.handle_battle()
         
         # update xp
         new_lvl_window = self.level_manager.update(xp)
@@ -150,3 +145,10 @@ class MapScreen:
                     self.movement[3] = False
                 if event.key == pygame.K_LSHIFT:
                     self.player.running = False
+
+
+    def handle_battle(self):
+        if self.battle_detector.detect_battle():
+            self.movement = [False, False, False, False]
+            return 1
+        return 0

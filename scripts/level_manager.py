@@ -42,6 +42,7 @@ class NewLevelWindow:
         self.animal = animal
         self.finish = False
         
+
     def render(self, surf):
         print(f"Level UP! {self.new_level - 1} -> {self.new_level}")
         rand_stats = self.random_stats()
@@ -53,6 +54,7 @@ class NewLevelWindow:
         self.finish = True
         print(self.animal.stats)
         
+
     def random_stats(self):
         all_stats = list(self.animal.stats.keys())
         rand_stats = []
@@ -77,6 +79,7 @@ class NewLevelWindow:
                     
             rand_stats.append((stat, val))
         return rand_stats
+    
     
     def is_finished(self):
         return self.finish
