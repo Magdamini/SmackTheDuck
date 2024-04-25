@@ -177,10 +177,10 @@ class MapScreen:
                 self.new_level_window = None
                 
         elif self.show_backpack:
-            self.player.backpack.render(self.display)
+            self.player.backpack.render(self.display, self.game_state_manager.scale, True)
             
             # TODO - do usunięcia -> możesz zobaczyć jak działa branie przedmiotów
-            self.player.backpack.get_clicked_item(self.display, self.game_state_manager.scale)
+            # self.player.backpack.get_clicked_item(self.display, self.game_state_manager.scale)
             
         elif self.show_animal_stats:
             self.animal.render_statistics(self.display)
