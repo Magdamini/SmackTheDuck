@@ -29,8 +29,8 @@ class Game:
         # trzeba pilnować żeby w każdym stanie był 'exit'
         self.states = {GameStates.START: self.start_screen,
                        GameStates.SELECT_PLAYER: self.select_player_screen,
-                    #   GameStates.BATTLE: self.battle_screen,
-                    #   GameStates.MAP: self.map_screen,
+                    #    GameStates.BATTLE: self.battle_screen,
+                    #    GameStates.MAP: self.map_screen,
                        GameStates.SELECT_ANIMAL: self.select_animal_screen,
                        GameStates.END: self.end_screen}
         

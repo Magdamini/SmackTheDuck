@@ -2,6 +2,7 @@ import pygame, sys
 
 from battle_screen import BattleScreen
 from game_states import GameStates
+from scripts.sound_manager import SoundManager
 from scripts.utils import load_images, Animation
 from scripts.player import Player, PlayerActions
 from scripts.camera import Camera
@@ -13,6 +14,7 @@ from scripts.level_manager import LevelManager
 class MapScreen:
     def __init__(self, display, game_state_manager, animal, player_type, game):
         self.display = display
+        self.sound_manager = SoundManager()
         self.game_state_manager = game_state_manager
         self.game = game
 
@@ -77,6 +79,8 @@ class MapScreen:
         self.new_level_window = None
 
         self.had_battle = False
+
+        self.sound_manager.play_music("game")
 
 
     def run(self):
@@ -192,7 +196,8 @@ class MapScreen:
 
     def handle_battle(self):
         if self.battle_detector.detect_battle():
-            self.game.states[GameStates.BATTLE] = BattleScreen(self.display, self.game_state_manager, self.animal)
+            self.sound_manager.stop_music()
+            self.game.states[GameStates.BATTLE] = BattleScreen(self.display, self.game_state_manager, self.animal, self.player.backpack) # TODO Jakim cudem to się nie wypierdziela to ja nwm
             self.movement = [False, False, False, False]
             return True
         return False
