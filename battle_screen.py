@@ -151,7 +151,7 @@ class BattleScreen():
 
     def render_extra_window(self):
         if self.show_backpack:
-            self.backpack.render(self.display)
+            self.backpack.render(self.display, self.game_state_manager.scale)
             
             # What does this do? TODO
             # self.player.backpack.get_clicked_item(self.display, self.game_state_manager.scale)
