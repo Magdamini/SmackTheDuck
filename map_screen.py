@@ -10,6 +10,7 @@ from scripts.battle_detector import Battle_detector
 from scripts.map_handler import MapHandler
 from scripts.item_collector import ItemCollector
 from scripts.level_manager import LevelManager
+from scripts.npc import NPCManager, DialogueWindow
 
 class MapScreen:
     def __init__(self, display, game_state_manager, animal, player_type, game):
@@ -71,12 +72,15 @@ class MapScreen:
         self.camera = Camera(self.display, self.player, self.tilemap)
         self.item_collector = ItemCollector(self.player, self.map_handler.maps)
         self.level_manager = LevelManager(self.animal, self.item_collector)
+        
+        self.npc_manager = NPCManager("data/npc/npc_data.txt", self.map_handler)
 
         self.battle_detector = Battle_detector(self.game_state_manager, self.player, self.tilemap)
 
         self.show_backpack = False
         self.show_animal_stats = False
         self.new_level_window = None
+        self.dialogue_window = None
 
         self.had_battle = False
 
@@ -85,6 +89,7 @@ class MapScreen:
 
     def run(self):
         # update player pos
+        # print(self.player.pos)
         if not self.is_player_paused():
             self.player.update(self.tilemap, (self.movement[1] - self.movement[0], self.movement[3] - self.movement[2]))
             self.map_handler.change_map()
@@ -104,7 +109,11 @@ class MapScreen:
         # update xp
         new_lvl = self.level_manager.update(xp, self.map_handler.maps)
         if new_lvl is not None:
+            self.npc_manager.activate_npc(new_lvl.new_level)
             self.new_level_window = new_lvl
+            
+            
+        
             
         
         # render
@@ -113,6 +122,9 @@ class MapScreen:
         self.tilemap.render(self.display, self.camera.pos)
         self.player.render(self.display, self.camera.pos)
         self.level_manager.render(self.display)
+        
+        # check npc
+        npc = self.npc_manager.talk_with_npc(self.display, self.camera.pos, self.player, self.map_handler.curr_map)
 
         self.render_extra_window()
 
@@ -144,9 +156,14 @@ class MapScreen:
                     elif self.show_animal_stats:
                         self.show_animal_stats = False
                         
+                if event.key == pygame.K_t:
+                    if self.dialogue_window is None and not self.is_player_paused() and npc is not None:
+                        self.dialogue_window = DialogueWindow(npc, self.player.backpack, self.animal)
+                        
                 if event.key == pygame.K_q:
                     self.show_backpack = False
                     self.show_animal_stats = False
+                    self.active_npc = None
                     
                 if event.key == pygame.K_x:
                     if not self.is_player_paused():
@@ -154,8 +171,11 @@ class MapScreen:
                         print(f"+{xp} Xp")
                         new_lvl = self.level_manager.update(xp, self.map_handler.maps)
                         if new_lvl is not None:
+                            self.npc_manager.activate_npc(new_lvl.new_level)
                             self.new_level_window = new_lvl
-                            self.pause_player = True
+
+                if event.key == pygame.K_p:
+                    print(self.player.pos)
                 
                 if event.key == pygame.K_ESCAPE:
                     self.game_state_manager.set_state(GameStates.END)
@@ -188,10 +208,15 @@ class MapScreen:
             
         elif self.show_animal_stats:
             self.animal.render_statistics(self.display)
+            
+        if self.dialogue_window is not None:
+            self.dialogue_window.render_dialogue(self.display, self.game_state_manager.scale)
+            if self.dialogue_window.dialogue_end():
+                self.dialogue_window = None
 
 
     def is_player_paused(self):
-        return self.show_backpack or self.show_animal_stats or self.new_level_window is not None
+        return self.show_backpack or self.show_animal_stats or self.new_level_window is not None or self.dialogue_window is not None
 
 
     def handle_battle(self):

@@ -1,0 +1,7 @@
+Villager Mark-villager-villager_a.txt-villager.txt-2-25 14-1 5 7 12
+Villager Eric-villager-villager_a.txt-villager.txt-2-11 15-3 6 8 14 15 
+Villager Carl-villager-villager_a.txt-villager.txt-2-20 17-2 4 9 10 11 13
+George-susyboy-trainer_a.txt-trainer.txt-4a-11 3-1 4 6 9 11 13
+Jack-boy-skillful_boy_a.txt-skillful_boy.txt-1-24 26-1 3 7 10 12
+Crying Duck-greenduck-sad_duck.txt-n-3-77 18-
+Benjamin-oldman-boss_guard_a.txt-boss_guard.txt-5-25 5-15

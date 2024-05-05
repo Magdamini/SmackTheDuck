@@ -24,7 +24,7 @@ class Battle_detector:
         if self.tile_loc != self.previous_tile_loc:
             self.previous_tile_loc = self.tile_loc
             check_loc = str(self.tile_loc[0]) + ';' + str(self.tile_loc[1])
-            if check_loc in self.tilemap.tilemap and self.tilemap.tilemap[check_loc]['type'] in FIGHT_TILES and self.battle_chances():
+            if check_loc in self.tilemap.tilemap and self.tilemap.tilemap[check_loc]['type'] in FIGHT_TILES and self.battle_chances(0):
                 self.update_manager()
                 return True
         return False

@@ -1,0 +1,17 @@
+Hey, I will tell you a secret. I've just|developed new fighting technics.
+- That's amazing. Show me all of them!
+I can only teach you one. Which do you|choose?
+-Could you help me improve my agility?/My luck is my weakest side.-10/Show me how to increase my critical|damage abilities!-14
+
+! stat AGILITY 1
+Great choice! This technic will improve|your agility by 1.
+-[Exit]-end
+
+! stat LUCK 1
+Great choice! This technic will improve|your luck by 1.
+-[Exit]-end
+
+! stat CRITICAL_DMG 1
+Great choice! This technic will improve|your critical damage by 1.
+-[Exit]-end
+

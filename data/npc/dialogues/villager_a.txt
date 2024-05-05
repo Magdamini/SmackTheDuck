@@ -1,0 +1,9 @@
+Good morning, you seem to be very tired.|Have a rest in our village.
+-Thank you for invitation but I need|to continue my mission.
+
+What is your task?
+-I'm looking for my wife, kidnapped by|ducks!
+
+! item
+That sounds very serious. Take this,|I hope it will help you succeed.
+-[Exit]-end

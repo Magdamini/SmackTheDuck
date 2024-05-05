@@ -1,0 +1,4 @@
+Good morning, stranger. What brings you|to this place?
+-I'm hunting the birds that kidnapped|my wife.
+I've seen some of the entering this cave,|but I'm afraid you are not strong|enough yet to defeat them.
+-[Exit]-end
