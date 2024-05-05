@@ -1,0 +1,17 @@
+Welcome my stranger, I have an offer|for you.
+-It sounds interesting...
+You can take part in my traning program.|What would you like to improve?
+-I want to practice my attack skills./I wish I would defence better.-10/My health isn't great. Can you help me|with this?-14
+
+! stat ATTACK 3
+Good job! You improved your attack by 3.
+-[Exit]-end
+
+! stat DEFENCE 2
+Good job! You improved your defence by 2.
+-[Exit]-end
+
+! stat HEALTH 5
+Good job! You improved your health by 5.
+-[Exit]-end
+

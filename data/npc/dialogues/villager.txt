@@ -1,0 +1,12 @@
+! rand 3 9
+
+Hey, welcome to my village, how can I|help you?
+-Do you know how to fight with mad ducks?
+Unfortunately, I'm only a farmer, but if|you would like to know how to grow|carrots, feel free to ask...
+-[Exit]-end
+
+
+Hello, do you like our village?
+-Yes, it looks amazing, but I need to|continue my mission.
+Good luck then and see you next time.
+-[Exit]-end

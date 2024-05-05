@@ -35,7 +35,7 @@ class DuckLeg(Item):
         
 class RawMeat(Item):
     def __init__(self, x, y):
-        super().__init__(x, y, "04", "RawMeat")
+        super().__init__(x, y, "04", "Raw Meat")
         
 class Shoes(Item):
     def __init__(self, x, y):

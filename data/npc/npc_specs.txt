@@ -1,0 +1,25 @@
+W pliku npc_data.txt znajdują się dane do wczytania npc w formacie:
+<Name>-<img_name>-<active_dialogue>-<dialogue>-<map>-<pos>-<activate_levels>
+
+<dialogue> może być równe n wtedy jest None i postać zawsze mówi ten sam dialog
+<pos> - w postaci x y (ze spacją po prostu)
+<activate_levels> - levele w których aktywowana jest dana postać -> jeśli ma być aktywna cały czas i tak trzeba podać 1
+
+
+
+DIALOGI
+dialogi bohatera zaczynają się od - i są postaci:
+-opcja1-linia/opcja2-linia
+gdzie linia to numer lini od której kontynuowany jest dialog po wybraniu danej opcji
+jeżeli linia to 'end' to kończymy dialog
+jeśli nie podano lini to kontynuuje się od kolejej linijki
+jeśli jest ! na początku to mamy jakąś komendę:
+! rand n1 n2    <- losowy wybór z podanych lini
+! item          <- otrzymujemy losowy item
+! stat type val    <- upgrade statystyki type (dokładna nazwa enuma np. ATTACK) o wartość val
+
+jak chcemy odnieść się do crt_damage to piszemy 'Critical'
+
+enterem jest '|'
+
+zawsze po kwesti npc jest kwestia bohatera nawet jeśli to tylko [exit]-end

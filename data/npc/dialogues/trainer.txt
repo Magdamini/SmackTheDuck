@@ -1,0 +1,2 @@
+Today's training session is over.|Please, come back later.
+-[Exit]-end
