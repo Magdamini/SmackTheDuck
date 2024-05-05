@@ -38,6 +38,7 @@ Rzeczy wstawione roboczo:
 - usuwanie przedmiotów z plecaka w trakcie chodzenia po mapie
 - print przy generowaniu itemów
 - dodawanie xp pod 'x'
+- pod p się printuje pozycja gracza
 
 -----------------------------------------------------------------------
 Level-e w firmie <lvl> <xp potrzeby do wbicia kolejnego> (resetuję xp do zera po wbiciu kolejnego)
