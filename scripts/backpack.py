@@ -114,10 +114,3 @@ class Backpack:
         else:
             self.items[item_name][0] -= 1
             return self.items[item_name][1]
-                
-        
-                
-                
-        
-        
-        

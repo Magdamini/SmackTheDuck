@@ -15,8 +15,7 @@ class Item:
     def render(self, surf, offset=(0,0)):
         surf.blit(self.img, (self.x - offset[0], self.y - offset[1]))
         
-    
-  
+
 # TODO check names        
 class Plaster(Item):
     def __init__(self, x, y):
