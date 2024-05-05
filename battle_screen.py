@@ -213,9 +213,9 @@ class BattleScreen():
 
     def render_extra_window(self):
         if self.show_backpack:
-            self.backpack.render(self.display)
+            item_clicked = self.backpack.render(self.display, self.game_state_manager.scale)
 
-            item_clicked = self.backpack.get_clicked_item(self.display, self.game_state_manager.scale)
+            # item_clicked = self.backpack.get_clicked_item(self.display, self.game_state_manager.scale)
             if item_clicked:
                 print(item_clicked)
                 # item_clicked.use(self.animal) TODO: use battle stats to change stats due to item
