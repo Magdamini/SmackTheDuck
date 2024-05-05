@@ -80,7 +80,7 @@ class MapScreen:
 
         self.had_battle = False
 
-        self.sound_manager.play_music("game")
+        # self.sound_manager.play_music("game")
 
 
     def run(self):
@@ -196,7 +196,7 @@ class MapScreen:
 
     def handle_battle(self):
         if self.battle_detector.detect_battle():
-            self.sound_manager.stop_music()
+            # self.sound_manager.stop_music()
             self.game.states[GameStates.BATTLE] = BattleScreen(self.display, self.game_state_manager, self.animal, self.player.backpack) # TODO Jakim cudem to się nie wypierdziela to ja nwm
             self.movement = [False, False, False, False]
             return True

@@ -43,7 +43,6 @@ class Backpack:
                     self.render_item(surf, curr_items[i], curr_spot, col, row)             
                 i += 1
         
-
         pygame.draw.rect(surf, (0, 0, 0), background, BORDER_WIDTH)
         
         
@@ -64,9 +63,9 @@ class Backpack:
         text = text_font.render(str(quantity), True, "black")
         
         surf.blit(text, (curr_spot.x + offset_x, curr_spot.y + offset_y))
-        
-        
-    # # zwraca None jeśli nie kliknięto w nic, jak kliknięto to zmniejsza wartość w plecaku i zwraca item
+
+
+    # zwraca None jeśli nie kliknięto w nic, jak kliknięto to zmniejsza wartość w plecaku i zwraca item
     def get_clicked_item(self, surf, scale=2):
         pos = [p // scale for p in pygame.mouse.get_pos()]
         offset_x = (surf.get_width() - COLUMNS * self.spot_size) // 2
@@ -91,20 +90,13 @@ class Backpack:
                             return self.remove_item(curr_items[i])
                     else:
                         self.last_click = False
-                        
-                    
+
                 i += 1
-            
+
+
     def remove_item(self, item_name):
         if self.items[item_name][0] == 1:
             return self.items.pop(item_name)[1]
         else:
             self.items[item_name][0] -= 1
             return self.items[item_name][1]
-                
-        
-                
-                
-        
-        
-        
