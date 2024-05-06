@@ -24,7 +24,7 @@ class ItemCollector:
     # maps -> słownik map z map_handlera
     # w jaskini bossa się nic nie pojawia
     def new_random_items(self, available_maps, no_new_items=1):
-        sizes = [((m.bounds[0][1] - m.bounds[0][0]) * (m.bounds[1][1] - m.bounds[1][0]), k) for k, m in available_maps.items()]
+        sizes = [((m.bounds[0][1] - m.bounds[0][0]) * (m.bounds[1][1] - m.bounds[1][0]), k) for k, m in available_maps.items() if k != '5a']
         mini = float('inf')
         for s, _ in sizes:
             mini = min(s, mini)
