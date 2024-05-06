@@ -56,7 +56,7 @@ class ItemCollector:
             
             
                 
-    # nie może być na niewchodzącym kafelku, drzwiach, ludziku, już istniejącym przedmiocie    
+    # nie może być na niewchodzącym kafelku, drzwiach, ludziku, już istniejącym przedmiocie, npc    
     def is_valid_pos(self, tilemap, map_name, x, y):  
         item_rect = pygame.Rect(x * tilemap.tile_size, y * tilemap.tile_size, tilemap.tile_size, tilemap.tile_size)
         player_rect = self.player.rect()
@@ -75,6 +75,9 @@ class ItemCollector:
             return False
         
         if tilemap.items.get(str(x) + ";" + str(y)) is not None:
+            return False
+        
+        if tilemap.npc.get(str(x) + ";" + str(y)) is not None:
             return False
         
         return True    
