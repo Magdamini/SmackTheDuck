@@ -18,7 +18,6 @@ class ItemCollector:
                 item = tilemap.get_item(x, y)
 
                 self.player.backpack.update(item)
-                print(f"New item collected: {item.name}")
                 
                 
     # maps -> słownik map z map_handlera
@@ -51,8 +50,6 @@ class ItemCollector:
             new_item_type = random.choice(self.item_list)
             curr_map.add_item(ITEM_TYPES[new_item_type], x, y)
             
-            # TODO - usunąć printa
-            print(f"added new item map:{scale[curr][1]}; x: {x}, y: {y}")
             
             
                 

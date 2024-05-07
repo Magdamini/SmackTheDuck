@@ -16,7 +16,7 @@ class SelectAnimalScreen(SelectScreen):
     def __init__(self, display, game_state_manager, game):
         self.options_str = ["animals/cat.png", "animals/dog.png"]
         self.animal_stats = [(8, 2, 1, 2, 2, 3), (11, 3, 2, 1, 1, 1)]
-        super().__init__(display, game_state_manager, self.options_str, GameStates.MAP, "animal", size=128)
+        super().__init__(display, game_state_manager, self.options_str, GameStates.STORY, "animal", size=128)
         
         self.animals = []
         for i in range(len(self.options_str)):

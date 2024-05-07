@@ -7,3 +7,4 @@ class GameStates(Enum):
     SELECT_ANIMAL = auto()
     END = auto()
     BATTLE = auto()
+    STORY = auto()
