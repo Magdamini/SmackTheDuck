@@ -50,6 +50,7 @@ class BattleScreen():
 
         self.show_more_buttons = {"show_more_animal": Button(123, 5, pygame.transform.scale(load_image(f"buttons/show_more.png"), (20, 38))),
                                   "show_more_enemy": Button(self.display.get_width() // 2 + 138, 5, pygame.transform.scale(load_image(f"buttons/show_more.png"), (20, 38)))}
+        self.show_more_info_is_clicked = False
     
 
         self.info_message = {"enemy_turn": load_image("messages/enemy_turn.png"),
@@ -95,7 +96,7 @@ class BattleScreen():
         for button in self.show_more_buttons.values():
             button.render(self.display)
         if not self.is_player_paused():
-            self.handle_show_more_buttons()
+            self.show_more_info_is_clicked = self.handle_show_more_buttons()
 
         if time() > self.cooldown:
             if self.fainted:
@@ -111,6 +112,8 @@ class BattleScreen():
                     button.render(self.display)
 
                 self.render_extra_window()
+
+                if self.show_more_info_is_clicked: return
 
                 if not self.is_player_paused():
                     self.handle_attack_buttons()
@@ -202,9 +205,9 @@ class BattleScreen():
                     self.animal.render_other_battle_statistics(self.display, 5, 5)
                 if name == "show_more_enemy":
                     self.enemy.render_other_battle_statistics(self.display, self.display.get_width() // 2 + 20, 5)
-                return
+                return True
+        return False
         
-
     
     def player_won(self):
         self.animal.xp_gained = self.enemy.lvl
@@ -233,11 +236,11 @@ class BattleScreen():
             pass
         elif self.show_more_enemy_info:
             pass
-        
+
         # do testowania minigierki
         elif self.minigame is not None:
             self.minigame.render(self.game_state_manager.scale)
-            finished, success =  self.minigame.is_finished()
+            finished, success = self.minigame.is_finished()
             if finished:
                 self.player_buttons['run'].changed = False  # niefortunnie ostatnim zdarzeniem jest kliknięcie tuż nad run i liczy to jako run XD
                 self.minigame = None
