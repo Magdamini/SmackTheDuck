@@ -10,6 +10,8 @@ from scripts.animal import Animal
 from scripts.fighter_statictics import Stats
 from random import randint
 
+from scripts.minigame_squares import MinigameSquares
+
 ATTACK_BUTTON_SIZE = [56*2, 14*2]
 SMALL_BUTTON_SIZE = [28, 28]
 FIGHTER_SIZE = [128, 128]
@@ -28,6 +30,8 @@ class BattleScreen():
 
         self.show_more_animal_info = False
         self.show_more_enemy_info = False
+        
+        self.minigame = None
 
         self.enemy = None
         self.get_rand_enemy()
@@ -75,6 +79,10 @@ class BattleScreen():
                 sys.exit()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_q:
                 self.show_backpack = False
+                
+            # do testowania minigierki    
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_m:
+                self.minigame = MinigameSquares(self.display)
 
         self.animal.render_battle_statistics(self.display, 5, 5)
         self.enemy.render_battle_statistics(self.display, self.display.get_width() // 2 + 20, 5)
@@ -195,6 +203,7 @@ class BattleScreen():
                 if name == "show_more_enemy":
                     self.enemy.render_other_battle_statistics(self.display, self.display.get_width() // 2 + 20, 5)
                 return
+        
 
     
     def player_won(self):
@@ -224,10 +233,19 @@ class BattleScreen():
             pass
         elif self.show_more_enemy_info:
             pass
+        
+        # do testowania minigierki
+        elif self.minigame is not None:
+            self.minigame.render(self.game_state_manager.scale)
+            finished, success =  self.minigame.is_finished()
+            if finished:
+                self.player_buttons['run'].changed = False  # niefortunnie ostatnim zdarzeniem jest kliknięcie tuż nad run i liczy to jako run XD
+                self.minigame = None
+                print(success)
             
 
     def is_player_paused(self):
-        return self.show_backpack or self.show_more_enemy_info or self.show_more_animal_info
+        return self.show_backpack or self.show_more_enemy_info or self.show_more_animal_info or self.minigame is not None
 
 
     def get_rand_enemy(self):

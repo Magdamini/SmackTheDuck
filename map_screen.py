@@ -11,6 +11,7 @@ from scripts.map_handler import MapHandler
 from scripts.item_collector import ItemCollector
 from scripts.level_manager import LevelManager
 from scripts.npc import NPCManager, DialogueWindow
+from scripts.honk import Boss
 
 class MapScreen:
     def __init__(self, display, game_state_manager, animal, player_type, game):
@@ -74,6 +75,7 @@ class MapScreen:
         self.level_manager = LevelManager(self.animal, self.item_collector)
         
         self.npc_manager = NPCManager("data/npc/npc_data.txt", self.map_handler)
+        self.boss = Boss(self.map_handler.maps['5a'])
 
         self.battle_detector = Battle_detector(self.game_state_manager, self.player, self.tilemap)
 
@@ -89,10 +91,9 @@ class MapScreen:
 
     def run(self):
         # update player pos
-        # print(self.player.pos)
         if not self.is_player_paused():
             self.player.update(self.tilemap, (self.movement[1] - self.movement[0], self.movement[3] - self.movement[2]))
-            self.map_handler.change_map()
+            self.map_handler.change_map(self.level_manager.level)
             self.camera.update()
         
         self.item_collector.collect_items(self.tilemap)
@@ -113,12 +114,17 @@ class MapScreen:
             self.npc_manager.activate_npc(new_lvl.new_level)
             self.new_level_window = new_lvl
 
+
         # render
         self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
 
         self.tilemap.render(self.display, self.camera.pos)
+        if self.map_handler.curr_map == "5a":
+            self.boss.render_on_map(self.display, self.player, self.camera.pos)
         self.player.render(self.display, self.camera.pos)
         self.level_manager.render(self.display)
+        
+        
         
         # check npc
         npc = self.npc_manager.talk_with_npc(self.display, self.camera.pos, self.player, self.map_handler.curr_map)
@@ -156,6 +162,11 @@ class MapScreen:
                 if event.key == pygame.K_t:
                     if self.dialogue_window is None and not self.is_player_paused() and npc is not None:
                         self.dialogue_window = DialogueWindow(npc, self.player.backpack, self.animal)
+                 
+                # TODO walka z bossem       
+                if event.key == pygame.K_f:
+                    if not self.is_player_paused() and self.boss.touch_player:
+                        print("walka z bossem")
                         
                 if event.key == pygame.K_q:
                     self.show_backpack = False
@@ -164,15 +175,12 @@ class MapScreen:
                     
                 if event.key == pygame.K_x:
                     if not self.is_player_paused():
-                        xp = 5
+                        xp = 5 * self.level_manager.level
                         print(f"+{xp} Xp")
                         new_lvl = self.level_manager.update(xp, self.map_handler.maps)
                         if new_lvl is not None:
                             self.npc_manager.activate_npc(new_lvl.new_level)
                             self.new_level_window = new_lvl
-
-                if event.key == pygame.K_p:
-                    print(self.player.pos)
                 
                 if event.key == pygame.K_ESCAPE:
                     self.game_state_manager.set_state(GameStates.END)

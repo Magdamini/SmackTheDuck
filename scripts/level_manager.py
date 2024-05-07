@@ -61,7 +61,7 @@ class LevelManager:
             else: self.xp = 0
             
             # ile nowych przedmiotów
-            new_items = round(len(available_maps) * 1.2)
+            new_items = round(len(available_maps))
             
             self.item_collector.new_random_items(available_maps, new_items)
             return NewLevelWindow(self.level, self.animal)

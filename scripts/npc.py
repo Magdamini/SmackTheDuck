@@ -178,7 +178,7 @@ class DialogueWindow:
             next_line = str(self.curr_line + 3)
             if len(option) > 1:
                 next_line = option[-1]
-            next_lines.append(next_line.split()[0])
+            next_lines.append(next_line.strip())
             
             txt = "\n".join(lines)
             player_text = text_font.render("-" + txt, True, 'black')

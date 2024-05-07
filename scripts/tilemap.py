@@ -10,7 +10,7 @@ PHYSICS_TILES = {'Cave': {1, 2, 3, 9, 10, 11, 12, 13, 14, 15},
                  'CaveOutside': {0, 1, 2, 3, 5, 6, 7, 8, 9, 10},
                  'CaveOutside00': {0, 1, 2, 3, 5}, # 4 - wejście
                  'CaveOutside01': {0, 1, 2, 3, 5}, # 4 - wejście
-                 'CaveOutside02': {0, 1, 2, 3, 5}, # 4 - wejście
+                 'CaveOutside02': {0, 1, 2, 3, 4, 5}, # 4 - wejście
                  'GrassBuildings': {0, 1, 2, 3, 4},
                  'GrassBuildings00': {1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19}, # 17 - wejście
                  'GrassBuildings01': {1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},
@@ -47,6 +47,7 @@ class Tilemap:
         self.items = {}
         self.npc = {}
         self.bounds = None
+        self.boss = None
 
 
     def tiles_around(self, pos):
@@ -89,6 +90,9 @@ class Tilemap:
             check_loc = str(tile_loc[0] + offset[0]) + ';' + str(tile_loc[1] + offset[1])
             if check_loc in self.npc:
                 npc_tiles.append(pygame.Rect((tile_loc[0] + offset[0]) * self.tile_size, (tile_loc[1] + offset[1]) * self.tile_size, self.tile_size, self.tile_size))
+                
+        if self.boss is not None:
+            npc_tiles.append(pygame.Rect((self.boss.pos[0], self.boss.pos[1], self.boss.size, self.boss.size)))
         return npc_tiles
 
 
