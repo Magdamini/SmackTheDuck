@@ -4,12 +4,12 @@ from enum import Enum
 
 import pygame
 
+
 class MiniGameStates(Enum):
     START = 'start'
     WAIT = 'wait'
     PLAY = 'play'
     END = 'end'
-
 
 
 START_BUTTON_SIZE = [size * 2 for size in (30, 14)]

@@ -226,8 +226,8 @@ class MapScreen:
     def handle_battle(self):
         if self.battle_detector.detect_battle():
             # self.sound_manager.stop_music()
+            self.movement = [False, False, False, False]
             self.game.states[GameStates.BATTLE] = BattleScreen(self.display, self.game_state_manager, self.animal, self.player.backpack)
             self.battle_detector.update_manager()
-            self.movement = [False, False, False, False]
             return True
         return False

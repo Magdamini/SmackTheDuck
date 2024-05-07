@@ -11,6 +11,7 @@ from scripts.fighter_statictics import Stats
 from random import randint
 
 from scripts.minigame_squares import MinigameSquares
+from scripts.minigame_shoot import MinigameSchoot
 
 ATTACK_BUTTON_SIZE = [56*2, 14*2]
 SMALL_BUTTON_SIZE = [28, 28]
@@ -27,9 +28,6 @@ class BattleScreen():
 
         self.backpack = backpack
         self.show_backpack = False
-
-        self.show_more_animal_info = False
-        self.show_more_enemy_info = False
         
         self.minigame = None
 
@@ -84,6 +82,8 @@ class BattleScreen():
             # do testowania minigierki    
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_m:
                 self.minigame = MinigameSquares(self.display)
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_n:
+                self.minigame = MinigameSchoot(self.display)
 
         self.animal.render_battle_statistics(self.display, 5, 5)
         self.enemy.render_battle_statistics(self.display, self.display.get_width() // 2 + 20, 5)
@@ -195,7 +195,8 @@ class BattleScreen():
                     self.update_manager()
                 if name == "backpack":
                     self.show_backpack = True
-                return
+                if name == "info":
+                    pass
     
 
     def handle_show_more_buttons(self):
@@ -232,11 +233,6 @@ class BattleScreen():
                 print(item_clicked)
                 # item_clicked.use(self.animal) TODO: use battle stats to change stats due to item
         
-        elif self.show_more_animal_info:
-            pass
-        elif self.show_more_enemy_info:
-            pass
-
         # do testowania minigierki
         elif self.minigame is not None:
             self.minigame.render(self.game_state_manager.scale)
@@ -245,10 +241,10 @@ class BattleScreen():
                 self.player_buttons['run'].changed = False  # niefortunnie ostatnim zdarzeniem jest kliknięcie tuż nad run i liczy to jako run XD
                 self.minigame = None
                 print(success)
-            
+
 
     def is_player_paused(self):
-        return self.show_backpack or self.show_more_enemy_info or self.show_more_animal_info or self.minigame is not None
+        return self.show_backpack or self.minigame is not None
 
 
     def get_rand_enemy(self):
