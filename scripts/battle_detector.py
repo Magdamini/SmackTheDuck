@@ -12,7 +12,7 @@ class Battle_detector:
         self.game_state_manager = game_state_manager
 
     
-    def battle_chances(self, chance_of_battle=7):
+    def battle_chances(self, chance_of_battle=4):
         rand_num = randint(0, 99)
         return rand_num < chance_of_battle
     

@@ -17,6 +17,8 @@ from random import randint
 ATTACK_BUTTON_SIZE = [56*2, 14*2]
 SMALL_BUTTON_SIZE = [28, 28]
 FIGHTER_SIZE = [128, 128]
+LUCK_CONVERSION_RATE = 5
+AGILITY_CONVERSION_RATE = 5
 
 
 class BattleScreen():
@@ -81,12 +83,6 @@ class BattleScreen():
                 sys.exit()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_q:
                 self.show_backpack = False
-                
-            # do testowania minigierki    
-            # elif event.type == pygame.KEYDOWN and event.key == pygame.K_m:
-            #     self.minigame = MinigameSquares(self.display)
-            # elif event.type == pygame.KEYDOWN and event.key == pygame.K_n:
-            #     self.minigame = MinigameSchoot(self.display)
 
         self.animal.render_battle_statistics(self.display, 5, 5)
         self.enemy.render_battle_statistics(self.display, self.display.get_width() // 2 + 20, 5)
@@ -125,7 +121,7 @@ class BattleScreen():
             else:
                 self.printed_message = self.info_message["enemy_turn"]
                 self.display.blit(self.printed_message, (10, self.display.get_height() - 2*ATTACK_BUTTON_SIZE[1] - 10))
-                if self.animal.battle_stats[Stats.LUCK] * 5 > randint(0, 99):
+                if self.animal.battle_stats[Stats.LUCK] * LUCK_CONVERSION_RATE > randint(0, 99): # enemy will hit himself due to player's luck
                     print("Player's luck")
                     self.dmg_text, other = self.enemy.perform_attack(self.enemy, list(self.enemy.moves.keys())[randint(0, len(self.enemy.moves.keys())-1)])
                     self.player_got_dmg_delt = isinstance(other, Animal)
@@ -165,7 +161,7 @@ class BattleScreen():
     def handle_attack_buttons(self):
         for num, button in self.attack_buttons.items():
             if button.is_clicked():
-                if self.enemy.battle_stats[Stats.LUCK] * 5 > randint(0, 99):
+                if self.enemy.battle_stats[Stats.LUCK] * LUCK_CONVERSION_RATE > randint(0, 99): # animal will hit himself due to enemy's luck
                     print("Enemy's luck")
                     self.dmg_text, other = self.animal.perform_attack(self.animal, self.list_of_moves[num])
                     self.player_got_dmg_delt = isinstance(other, Animal)
@@ -196,7 +192,8 @@ class BattleScreen():
         for name, button in self.player_buttons.items():
             if button.is_clicked():
                 if name == "run":
-                    self.update_manager()
+                    if 50 + self.animal.battle_stats[Stats.AGILITY] * AGILITY_CONVERSION_RATE > randint(0, 99):
+                        self.update_manager()
                 if name == "backpack":
                     self.show_backpack = True
                 if name == "info" and not self.minigame_used:
