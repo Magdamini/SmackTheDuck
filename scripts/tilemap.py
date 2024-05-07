@@ -4,6 +4,7 @@ import pygame
 from scripts.utils import load_json
 
 NEIGHBOR_OFFSETS = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1), (0, 0)]
+
 # TODO json for PHYSICS_TILES
 PHYSICS_TILES = {'Cave': {1, 2, 3, 9, 10, 11, 12, 13, 14, 15},
                  'CaveOutside': {0, 1, 2, 3, 5, 6, 7, 8, 9, 10},
@@ -34,6 +35,8 @@ PHYSICS_TILES = {'Cave': {1, 2, 3, 9, 10, 11, 12, 13, 14, 15},
                  'HouseIndoor01': {0, 1, 2, 3},
                  'WaterCatwalk': {2, 7, 8},
                  'WaterFloor': {0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13}}
+
+BATTLE_TILES = {'GrassBushes',}
 
 
 class Tilemap:
@@ -78,6 +81,7 @@ class Tilemap:
         self.tile_size = map_data['tile_size']
         self.bounds = self.get_bounds()
         
+
     def npc_rects(self, pos):
         npc_tiles = []
         tile_loc = (int(pos[0] // self.tile_size), int(pos[1] // self.tile_size))
@@ -93,9 +97,16 @@ class Tilemap:
         for tile in self.tiles_around(pos):
             if tile['type'] in PHYSICS_TILES.keys() and tile['variant'] in PHYSICS_TILES[tile['type']]:
                 rects.append(pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size))
-                
         return rects
     
+
+    def battle_rects_around(self, pos):
+        rects = []
+        for tile in self.tiles_around(pos):
+            if tile['type'] in BATTLE_TILES:
+                rects.append(pygame.Rect(tile['pos'][0] * self.tile_size +4, tile['pos'][1] * self.tile_size +4, self.tile_size // 2, self.tile_size // 2))
+        return rects
+
 
     def forbidden_rects(self, pos):
         return self.physics_rects_around(pos) + self.rect_out_of_the_map(pos) + self.npc_rects(pos)
@@ -142,6 +153,7 @@ class Tilemap:
     def get_item(self, x, y):
         return self.items.pop(str(x) + ";" + str(y))
     
+
     def add_npc(self, npc):
         x, y = npc.pos
         self.npc[str(x // self.tile_size) + ";" + str(y // self.tile_size)] = npc

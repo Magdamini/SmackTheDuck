@@ -96,6 +96,7 @@ class MapScreen:
             self.camera.update()
         
         self.item_collector.collect_items(self.tilemap)
+        
         # battle
         xp = 0
         if self.had_battle:
@@ -111,11 +112,7 @@ class MapScreen:
         if new_lvl is not None:
             self.npc_manager.activate_npc(new_lvl.new_level)
             self.new_level_window = new_lvl
-            
-            
-        
-            
-        
+
         # render
         self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
 
@@ -179,7 +176,6 @@ class MapScreen:
                 
                 if event.key == pygame.K_ESCAPE:
                     self.game_state_manager.set_state(GameStates.END)
-                          
                 
             if event.type == pygame.KEYUP:
                 if event.key in (pygame.K_LEFT, pygame.K_a):
@@ -222,7 +218,8 @@ class MapScreen:
     def handle_battle(self):
         if self.battle_detector.detect_battle():
             # self.sound_manager.stop_music()
-            self.game.states[GameStates.BATTLE] = BattleScreen(self.display, self.game_state_manager, self.animal, self.player.backpack) # TODO Jakim cudem to się nie wypierdziela to ja nwm
+            self.game.states[GameStates.BATTLE] = BattleScreen(self.display, self.game_state_manager, self.animal, self.player.backpack)
+            self.battle_detector.update_manager()
             self.movement = [False, False, False, False]
             return True
         return False

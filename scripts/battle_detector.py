@@ -2,31 +2,29 @@ from random import randint
 from scripts.fighter import Fighter
 from game_states import GameStates
 
-FIGHT_TILES = {'GrassBushes', }
-
 
 class Battle_detector:
     def __init__(self, game_state_manager, player, tilemap):
         self.player = player
         self.tilemap = tilemap
-        self.tile_loc = (self.player.pos[0] // self.tilemap.tile_size, self.player.pos[1] // self.tilemap.tile_size)
-        self.previous_tile_loc = self.tile_loc
+        self.battle_tile_loc = None
+        self.previous_battle_tile_loc = None
         self.game_state_manager = game_state_manager
 
     
-    def battle_chances(self, chance_of_battle=20):
+    def battle_chances(self, chance_of_battle=7):
         rand_num = randint(0, 99)
         return rand_num < chance_of_battle
     
 
-    def detect_battle(self):
-        self.tile_loc = (self.player.pos[0] // self.tilemap.tile_size, self.player.pos[1] // self.tilemap.tile_size)
-        if self.tile_loc != self.previous_tile_loc:
-            self.previous_tile_loc = self.tile_loc
-            check_loc = str(self.tile_loc[0]) + ';' + str(self.tile_loc[1])
-            if check_loc in self.tilemap.tilemap and self.tilemap.tilemap[check_loc]['type'] in FIGHT_TILES and self.battle_chances(0):
-                self.update_manager()
+    def detect_battle(self): # TODO polish this
+        self.battle_tile_loc = (int((self.player.pos[0] + self.player.size[0] // 2) // self.tilemap.tile_size), int((self.player.pos[1] + self.player.size[1] // 2) // self.tilemap.tile_size))
+        player_rect = self.player.rect()
+        for rect in self.tilemap.battle_rects_around(self.player.pos):
+            if player_rect.colliderect(rect) and self.battle_tile_loc != self.previous_battle_tile_loc and self.battle_chances():
+                self.previous_battle_tile_loc = self.battle_tile_loc
                 return True
+        self.previous_battle_tile_loc = self.battle_tile_loc
         return False
 
 
