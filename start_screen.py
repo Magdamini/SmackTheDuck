@@ -24,7 +24,7 @@ class StartScreen():
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 self.update_manager()
 
-        self.display.blit(load_image("scenes/start.png"), (0, 0))
+        self.display.blit(load_image("scenes/opening_screen.png"), (0, 0))
         self.render_title()
     
     

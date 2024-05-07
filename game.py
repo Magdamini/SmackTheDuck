@@ -15,7 +15,9 @@ class Game:
         pygame.init()
 
         pygame.display.set_caption('Best game ever made')
+        # self.screen = pygame.display.set_mode((640, 480))
         self.screen = pygame.display.set_mode((640, 480))
+
         self.display = pygame.Surface((320, 240))
 
         self.clock = pygame.time.Clock()
