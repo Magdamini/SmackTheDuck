@@ -65,9 +65,3 @@ class GameStateManager:
 
 if __name__ == '__main__':
     Game().run()
-
-"""
-BUGS:
-- pause player befor battle
-- show other stat info -> auto attack
-"""
