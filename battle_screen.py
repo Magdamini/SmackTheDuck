@@ -11,8 +11,8 @@ from scripts.fighter_statictics import Stats
 from scripts.items import Stones
 from random import randint
 
-from scripts.minigame_squares import MinigameSquares
-from scripts.minigame_shoot import MinigameSchoot
+# from scripts.minigame_squares import MinigameSquares
+# from scripts.minigame_shoot import MinigameSchoot
 
 ATTACK_BUTTON_SIZE = [56*2, 14*2]
 SMALL_BUTTON_SIZE = [28, 28]
@@ -31,6 +31,8 @@ class BattleScreen():
         self.show_backpack = False
         
         self.minigame = None
+        self.minigame_used = False
+        self.minigame_success = False
 
         self.enemy = None
         self.get_rand_enemy()
@@ -81,10 +83,10 @@ class BattleScreen():
                 self.show_backpack = False
                 
             # do testowania minigierki    
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_m:
-                self.minigame = MinigameSquares(self.display)
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_n:
-                self.minigame = MinigameSchoot(self.display)
+            # elif event.type == pygame.KEYDOWN and event.key == pygame.K_m:
+            #     self.minigame = MinigameSquares(self.display)
+            # elif event.type == pygame.KEYDOWN and event.key == pygame.K_n:
+            #     self.minigame = MinigameSchoot(self.display)
 
         self.animal.render_battle_statistics(self.display, 5, 5)
         self.enemy.render_battle_statistics(self.display, self.display.get_width() // 2 + 20, 5)
@@ -117,8 +119,8 @@ class BattleScreen():
                 if self.show_more_info_is_clicked: return
 
                 if not self.is_player_paused():
-                    self.handle_attack_buttons()
                     self.handle_player_buttons()
+                    self.handle_attack_buttons()
 
             else:
                 self.printed_message = self.info_message["enemy_turn"]
@@ -176,7 +178,8 @@ class BattleScreen():
                     else:
                         self.player_turn = not(self.player_turn)
                 else:
-                    self.dmg_text, other = self.animal.perform_attack(self.enemy, self.list_of_moves[num])
+                    self.dmg_text, other = self.animal.perform_attack(self.enemy, self.list_of_moves[num], self.minigame_success)
+                    self.minigame_success = False
                     self.player_got_dmg_delt = isinstance(other, Animal)
                     self.dmg_text_cooldown = time() + 0.5
                     self.cooldown = time() + 1
@@ -196,8 +199,9 @@ class BattleScreen():
                     self.update_manager()
                 if name == "backpack":
                     self.show_backpack = True
-                if name == "info":
-                    pass
+                if name == "info" and not self.minigame_used:
+                    self.minigame = self.animal.minigame(self.display)
+                    self.minigame_used = True
     
 
     def handle_show_more_buttons(self):
@@ -242,7 +246,7 @@ class BattleScreen():
             if finished:
                 self.player_buttons['run'].changed = False  # niefortunnie ostatnim zdarzeniem jest kliknięcie tuż nad run i liczy to jako run XD
                 self.minigame = None
-                print(success)
+                self.minigame_success = success
 
 
     def is_player_paused(self):

@@ -23,13 +23,18 @@ class Fighter:
         self.battle_stats = None
 
 
-    def perform_attack(self, other, move):
+    def perform_attack(self, other, move, power_up=False):
         times = 1
         critical_dmg = False
+        big_critical_dmg = False
+
+        if power_up:
+            times = 3
+            big_critical_dmg = True    
 
         if self.battle_stats[Stats.CRITICAL_DMG] * 5 > randint(0, 99):
             times = 2
-            critical_dmg = True
+            critical_dmg = True            
 
         dmg_blocked = other.battle_stats[Stats.DEFENCE] - self.moves[move][1] if other.battle_stats[Stats.DEFENCE] > self.moves[move][1] else 0
 
@@ -46,11 +51,6 @@ class Fighter:
             else:
                 other.battle_stats[Stats.DEFENCE] -= self.moves[move][2]
 
-            if other.battle_stats[Stats.ATTACK] < self.moves[move][2]:
-                other.battle_stats[Stats.ATTACK] = 0
-            else:
-                other.battle_stats[Stats.ATTACK] -= self.moves[move][2]
-
             if other.battle_stats[Stats.CRITICAL_DMG] < self.moves[move][2]:
                 other.battle_stats[Stats.CRITICAL_DMG] = 0
             else:
@@ -66,12 +66,14 @@ class Fighter:
             else:
                 other.battle_stats[Stats.AGILITY] -= self.moves[move][2]
 
-        dmg_text = self.get_dmg_text(dmg_delt, critical_dmg)
+        dmg_text = self.get_dmg_text(dmg_delt, critical_dmg, big_critical_dmg)
         return dmg_text, other
     
 
-    def get_dmg_text(self, dmg_delt, critical_dmg):
-        if critical_dmg:
+    def get_dmg_text(self, dmg_delt, critical_dmg, big_critical_dmg):
+        if big_critical_dmg:
+            dmg_text = text_image(str(dmg_delt), DMG_FONT_SIZE + 20, "data/fonts/Retro.ttf", color=(255, 0, 0)) # big_critical_hit -> red
+        elif critical_dmg:
             dmg_text = text_image(str(dmg_delt), DMG_FONT_SIZE + 10, "data/fonts/Retro.ttf", color=(255, 0, 0)) # critical_hit -> red
         else:
             dmg_text = text_image(str(dmg_delt), DMG_FONT_SIZE, "data/fonts/Retro.ttf", color=(0, 255, 255))

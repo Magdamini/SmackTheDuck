@@ -4,6 +4,8 @@ from game_states import GameStates
 from select_screen import SelectScreen
 from map_screen import MapScreen
 from scripts.animal import Animal
+from scripts.minigame_squares import MinigameSquares
+from scripts.minigame_shoot import MinigameSchoot
 
 #[*attack, -defence, -stats]
 MOVES = {"animals/cat.png": {"bite": [1, 0, 0], "hiss": [0, 0, 1], "jump_attack": [0.8, 2, 0], "scratch": [0.6, 7, 0]},
@@ -19,13 +21,19 @@ class SelectAnimalScreen(SelectScreen):
         self.animals = []
         for i in range(len(self.options_str)):
             stats = self.animal_stats[i]
-            animal = Animal(self.options_str[i], stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], MOVES[self.options_str[i]])
+            animal = Animal(self.options_str[i], stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], MOVES[self.options_str[i]], self.get_minigame(i))
             self.animals.append(animal)
         
         self.game = game
 
         # draw
         self.border_offset = 10
+    
+
+    def get_minigame(self, i):
+        minigames = {"animals/cat.png": MinigameSquares,
+                     "animals/dog.png": MinigameSchoot}
+        return minigames[self.options_str[i]]
         
     
     def update_manager(self):
