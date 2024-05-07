@@ -86,7 +86,7 @@ class MapScreen:
 
         self.had_battle = False
 
-        # self.sound_manager.play_music("game")
+        self.sound_manager.play_music("game")
 
 
     def run(self):

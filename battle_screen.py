@@ -8,6 +8,7 @@ from scripts.sound_manager import SoundManager
 from scripts.enemy import Enemy
 from scripts.animal import Animal
 from scripts.fighter_statictics import Stats
+from scripts.items import Stones
 from random import randint
 
 from scripts.minigame_squares import MinigameSquares
@@ -226,12 +227,13 @@ class BattleScreen():
 
     def render_extra_window(self):
         if self.show_backpack:
-            item_clicked = self.backpack.render(self.display, self.game_state_manager.scale)
-
-            # item_clicked = self.backpack.get_clicked_item(self.display, self.game_state_manager.scale)
+            item_clicked = self.backpack.render(self.display, self.game_state_manager.scale, get_item=True)
             if item_clicked:
                 print(item_clicked)
-                # item_clicked.use(self.animal) TODO: use battle stats to change stats due to item
+                if isinstance(item_clicked, Stones):
+                    item_clicked.use(self.enemy)
+                else:
+                    item_clicked.use(self.animal)
         
         # do testowania minigierki
         elif self.minigame is not None:
