@@ -6,6 +6,7 @@ from map_screen import MapScreen
 from scripts.animal import Animal
 from scripts.minigame_squares import MinigameSquares
 from scripts.minigame_shoot import MinigameSchoot
+from scripts.utils import text_image
 
 #[*attack, -defence, -stats]
 MOVES = {"animals/cat.png": {"bite": [1, 0, 0], "hiss": [0, 0, 1], "jump_attack": [0.8, 2, 0], "scratch": [0.6, 7, 0]},
@@ -49,8 +50,7 @@ class SelectAnimalScreen(SelectScreen):
             
             
     def render_desc(self, curr_y):
-        big_text_font = pygame.font.Font("data/fonts/Retro.ttf", size=16)
-        title_text = big_text_font.render("Pet Statistics", True, "black")
+        title_text = text_image("Pet Statistics", 16)
         self.display.blit(title_text, (self.display.get_width() * 3 // 4 - title_text.get_width() // 2, curr_y))
         left = self.display.get_width() // 2 + self.border_offset
         
@@ -60,16 +60,10 @@ class SelectAnimalScreen(SelectScreen):
         pygame.draw.line(self.display, (0, 0, 0), (left - line_offset, curr_y), (self.display.get_width() - self.border_offset + line_offset, curr_y))
         curr_y += 4
         
-        text_font = pygame.font.Font("data/fonts/Retro.ttf", size=10)
         for stat, val in self.animals[self.curr_option].stats.items():
-            stat_text = text_font.render(f"{stat.value}: {val}", True, "black")
+            stat_text = text_image(f"{stat.value}: {val}", 10)
             self.display.blit(stat_text, (left, curr_y))
             curr_y += 3 + stat_text.get_height()
 
 
-# Stats.HEALTH: health,
-# Stats.ATTACK: attack,
-# Stats.DEFENCE: defence,
-# Stats.CRITICAL_DMG: critical_dmg,
-# Stats.AGILITY: agility,
-# Stats.LUCK: luck
+

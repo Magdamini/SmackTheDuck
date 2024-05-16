@@ -82,11 +82,6 @@ class BattleScreen():
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_q:
                 self.show_backpack = False
                 
-            # do testowania minigierki    
-            # elif event.type == pygame.KEYDOWN and event.key == pygame.K_m:
-            #     self.minigame = MinigameSquares(self.display)
-            # elif event.type == pygame.KEYDOWN and event.key == pygame.K_n:
-            #     self.minigame = MinigameSchoot(self.display)
 
         self.animal.render_battle_statistics(self.display, 5, 5)
         self.enemy.render_battle_statistics(self.display, self.display.get_width() // 2 + 20, 5)
@@ -245,6 +240,7 @@ class BattleScreen():
             finished, success = self.minigame.is_finished()
             if finished:
                 self.player_buttons['run'].changed = False  # niefortunnie ostatnim zdarzeniem jest kliknięcie tuż nad run i liczy to jako run XD
+                self.player_buttons['backpack'].changed = False
                 self.minigame = None
                 self.minigame_success = success
 

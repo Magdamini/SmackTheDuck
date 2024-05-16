@@ -10,7 +10,7 @@ class Item:
         self.img_name = img
         self.img = load_image(f'tiles/Items/{img}.png')
         self.name = name
-        self.desc = "+2 to random stat"
+        self.desc = ""
 
         
     def render(self, surf, offset=(0,0)):
