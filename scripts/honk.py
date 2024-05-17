@@ -5,6 +5,7 @@ import pygame
 # TODO dać statsy i moves bo nie wiem co to xd
 MOVES = {"attack": [1, 0, 0]}
 
+
 class Boss(Enemy):
     def __init__(self, map):
         img = "NPC/Basic/honk.png"
@@ -24,7 +25,6 @@ class Boss(Enemy):
         rect = pygame.Rect(0, 0, self.size + 2 * offset, self.size + 2 * offset)
         rect.center = (self.pos[0] + self.size // 2, self.pos[1] + self.size // 2)
         return rect
-        
         
         
     def render_on_map(self, surf, player, offset=(0, 0)):

@@ -1,6 +1,6 @@
 import pygame, sys
 
-from battle_screen import BattleScreen
+from battle_screen import BattleScreen, HonkBattleScreen
 from game_states import GameStates
 from scripts.sound_manager import SoundManager
 from scripts.utils import load_images, Animation
@@ -167,6 +167,9 @@ class MapScreen:
                 if event.key == pygame.K_f:
                     if not self.is_player_paused() and self.boss.touch_player:
                         print("walka z bossem")
+                        self.movement = [False, False, False, False]
+                        self.game.states[GameStates.BATTLE] = HonkBattleScreen(self.display, self.game_state_manager, self.animal, self.player.backpack, self.boss)
+                        self.battle_detector.update_manager()
                         
                 if event.key == pygame.K_q:
                     self.show_backpack = False

@@ -282,3 +282,25 @@ class BattleScreen():
 8. Minigame
 9. Optymalizacja wszystkiego - żeby się przyjemnie grało
 """
+
+
+class HonkBattleScreen(BattleScreen):
+    def __init__(self, display, game_state_manager, animal, backpack, boss):
+        super().__init__((display, game_state_manager, animal, backpack))
+        self.boss = boss
+
+
+    def get_rand_enemy(self):
+        enemies_data = load_json("data/maps/enemies.json")
+        rand_enemy_img = list(enemies_data.keys())[randint(0, len(list(enemies_data.keys()))-1)]
+        rand_enemy_moves = enemies_data[rand_enemy_img]
+        level = randint(self.animal.lvl-1, self.animal.lvl+1)
+        if level == 0: level = 1
+        health = randint(4*level, 5*level)
+        attack = randint(2, 3*level)
+        defence = randint(0, 2*level)
+        critical_dmg = randint(0, 2)
+        agility = randint(0, level)
+        luck = randint(0, 2)
+        self.enemy = Enemy(rand_enemy_img, health, attack, defence, critical_dmg, agility, luck, rand_enemy_moves, level=level)
+        self.enemy.battle_stats = self.enemy.stats.copy()

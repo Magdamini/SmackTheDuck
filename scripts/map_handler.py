@@ -45,8 +45,8 @@ class MapHandler():
         self.load_items()
         
         
-        self.curr_map = "0"
-        # self.curr_map = "5"
+        # self.curr_map = "0"
+        self.curr_map = "5"
         self.tile_size = self.get_curr_map().tile_size
         self.player = player
         

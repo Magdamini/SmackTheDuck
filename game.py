@@ -65,3 +65,7 @@ class GameStateManager:
 
 if __name__ == '__main__':
     Game().run()
+
+
+# TODO after work change
+# -> map_handler - start level map
