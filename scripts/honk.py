@@ -9,7 +9,7 @@ MOVES = {"attack": [1, 0, 0]}
 class Boss(Enemy):
     def __init__(self, map):
         img = "NPC/Basic/honk.png"
-        super().__init__(img, 120, 30, 20, 10, 10, 5, MOVES, 15)
+        super().__init__(img, 120, 100, 100, 10, 10, 10, MOVES, 15)
         
         map.boss = self
         

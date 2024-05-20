@@ -1,6 +1,7 @@
 import pygame, sys
 
-from battle_screen import BattleScreen, HonkBattleScreen
+from battle_screen import BattleScreen
+from honk_battle_screen import HonkBattleScreen
 from game_states import GameStates
 from scripts.sound_manager import SoundManager
 from scripts.utils import load_images, Animation
@@ -16,7 +17,7 @@ from scripts.honk import Boss
 class MapScreen:
     def __init__(self, display, game_state_manager, animal, player_type, game):
         self.display = display
-        self.sound_manager = SoundManager()
+        # self.sound_manager = SoundManager()
         self.game_state_manager = game_state_manager
         self.game = game
 
@@ -86,7 +87,7 @@ class MapScreen:
 
         self.had_battle = False
 
-        self.sound_manager.play_music("game")
+        # self.sound_manager.play_music("game")
 
 
     def run(self):
