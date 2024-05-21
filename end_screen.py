@@ -21,7 +21,7 @@ class EndScreen():
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                if event.key == pygame.K_ESCAPE:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
                 else:

@@ -67,7 +67,7 @@ class Fighter:
                 other.battle_stats[Stats.AGILITY] -= self.moves[move][2]
 
         dmg_text = self.get_dmg_text(dmg_delt, critical_dmg, big_critical_dmg)
-        return dmg_text, other
+        return dmg_text
     
 
     def get_dmg_text(self, dmg_delt, critical_dmg, big_critical_dmg):

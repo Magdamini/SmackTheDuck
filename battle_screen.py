@@ -12,7 +12,7 @@ from scripts.items import Stones
 from random import randint
 
 # from scripts.minigame_squares import MinigameSquares
-# from scripts.minigame_shoot import MinigameSchoot
+# from scripts.minigame_shoot import MinigameShoot
 
 ATTACK_BUTTON_SIZE = [56*2, 14*2]
 SMALL_BUTTON_SIZE = [28, 28]
@@ -22,12 +22,13 @@ AGILITY_CONVERSION_RATE = 5
 
 
 class BattleScreen():
-    def __init__(self, display, game_state_manager, animal, backpack):
+    def __init__(self, display, game_state_manager, animal, backpack, background_img = "scenes/battle_background.png"):
         self.display = display
         self.sound_manager = SoundManager()
         self.game_state_manager = game_state_manager
         self.animal = animal
         self.animal.battle_stats = self.animal.stats.copy()
+        self.background_img = background_img
 
         self.backpack = backpack
         self.show_backpack = False
@@ -46,7 +47,7 @@ class BattleScreen():
                                2: Button(10, self.display.get_height() - ATTACK_BUTTON_SIZE[1] - 5, pygame.transform.scale(load_image(f"buttons/{self.list_of_moves[2]}.png"), (ATTACK_BUTTON_SIZE[0], ATTACK_BUTTON_SIZE[1]))),
                                3: Button(10 + ATTACK_BUTTON_SIZE[0] + 5, self.display.get_height() - ATTACK_BUTTON_SIZE[1] - 5, pygame.transform.scale(load_image(f"buttons/{self.list_of_moves[3]}.png"), (ATTACK_BUTTON_SIZE[0], ATTACK_BUTTON_SIZE[1])))}
         
-        self.player_buttons = {"info": Button(25 + 2*ATTACK_BUTTON_SIZE[0], self.display.get_height() - 2*ATTACK_BUTTON_SIZE[1] - 10, pygame.transform.scale(load_image(f"buttons/info.png"), (SMALL_BUTTON_SIZE[0], SMALL_BUTTON_SIZE[1]))),
+        self.player_buttons = {"minigame": Button(25 + 2*ATTACK_BUTTON_SIZE[0], self.display.get_height() - 2*ATTACK_BUTTON_SIZE[1] - 10, pygame.transform.scale(load_image(f"buttons/minigame.png"), (SMALL_BUTTON_SIZE[0], SMALL_BUTTON_SIZE[1]))),
                                "backpack": Button(25 + 2*ATTACK_BUTTON_SIZE[0] + 5 + SMALL_BUTTON_SIZE[0], self.display.get_height() - 2*ATTACK_BUTTON_SIZE[1] - 10, pygame.transform.scale(load_image(f"buttons/backpack.png"), (SMALL_BUTTON_SIZE[0], SMALL_BUTTON_SIZE[1]))),
                                "run": Button(25 + 2*ATTACK_BUTTON_SIZE[0], self.display.get_height() - ATTACK_BUTTON_SIZE[1] - 5, pygame.transform.scale(load_image(f"buttons/run.png"), (2*SMALL_BUTTON_SIZE[0] + 5, SMALL_BUTTON_SIZE[1])))}
         
@@ -76,6 +77,7 @@ class BattleScreen():
 
     def run(self):
         self.display.fill((155, 255, 155))
+        self.display.blit(load_image(self.background_img), (0, 0))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -118,38 +120,30 @@ class BattleScreen():
                     self.handle_player_buttons()
                     self.handle_attack_buttons()
 
-            else:
+            else: # enemy's turn
                 self.printed_message = self.info_message["enemy_turn"]
                 self.display.blit(self.printed_message, (10, self.display.get_height() - 2*ATTACK_BUTTON_SIZE[1] - 10))
                 if self.animal.battle_stats[Stats.LUCK] * LUCK_CONVERSION_RATE > randint(0, 99): # enemy will hit himself due to player's luck
                     print("Player's luck")
-                    self.dmg_text, other = self.enemy.perform_attack(self.enemy, list(self.enemy.moves.keys())[randint(0, len(self.enemy.moves.keys())-1)])
-                    self.player_got_dmg_delt = isinstance(other, Animal)
-                    self.dmg_text_cooldown = time() + 0.5
-                    self.cooldown = time() + 1
-                    player_won = True if self.enemy.battle_stats[Stats.HEALTH] < 1 else False
-                    if player_won:
+                    self.dmg_text = self.enemy.perform_attack(self.enemy, list(self.enemy.moves.keys())[randint(0, len(self.enemy.moves.keys())-1)])
+                    self.player_got_dmg_delt = False
+                    self.do_cooldown()
+                    if self.enemy.battle_stats[Stats.HEALTH] < 1: # player won
                         self.player_won()
                     else:
                         self.player_turn = not(self.player_turn)
                 else:
-                    self.dmg_text, other = self.enemy.perform_attack(self.animal, list(self.enemy.moves.keys())[randint(0, len(self.enemy.moves.keys())-1)])
-                    self.player_got_dmg_delt = isinstance(other, Animal)
-                    self.dmg_text_cooldown = time() + 0.5
-                    self.cooldown = time() + 1
-                    enemy_won = True if self.animal.battle_stats[Stats.HEALTH] < 1 else False
-                    if enemy_won:
+                    self.dmg_text = self.enemy.perform_attack(self.animal, list(self.enemy.moves.keys())[randint(0, len(self.enemy.moves.keys())-1)])
+                    self.player_got_dmg_delt = True
+                    self.do_cooldown()
+                    if self.animal.battle_stats[Stats.HEALTH] < 1: # enemy won
                         self.enemy_won()
                     else:
                         self.player_turn = not(self.player_turn)
         else:
             self.display.blit(self.printed_message, (10, self.display.get_height() - 2*ATTACK_BUTTON_SIZE[1] - 10))
             if self.fainted:
-                self.rotate_angl += 10
-                if self.animal.battle_stats[Stats.HEALTH] < 1:
-                    self.display.blit(pygame.transform.rotate(self.animal.img, self.rotate_angl), (int(self.display.get_width() * 0.05), 40))
-                elif self.enemy.battle_stats[Stats.HEALTH] < 1:
-                    self.display.blit(pygame.transform.rotate(self.enemy.img, self.rotate_angl), (int(self.display.get_width() * 0.55), 40))
+                self.sb_fainted()
         
         if time() < self.dmg_text_cooldown:
             if self.player_got_dmg_delt:
@@ -163,25 +157,21 @@ class BattleScreen():
             if button.is_clicked():
                 if self.enemy.battle_stats[Stats.LUCK] * LUCK_CONVERSION_RATE > randint(0, 99): # animal will hit himself due to enemy's luck
                     print("Enemy's luck")
-                    self.dmg_text, other = self.animal.perform_attack(self.animal, self.list_of_moves[num])
-                    self.player_got_dmg_delt = isinstance(other, Animal)
-                    self.dmg_text_cooldown = time() + 0.5
-                    self.cooldown = time() + 1
-                    enemy_won = True if self.animal.battle_stats[Stats.HEALTH] < 1 else False
+                    self.dmg_text = self.animal.perform_attack(self.animal, self.list_of_moves[num])
+                    self.player_got_dmg_delt = True
+                    self.do_cooldown()
                     self.printed_message = self.info_message["enemy_turn"]
-                    if enemy_won:
+                    if self.animal.battle_stats[Stats.HEALTH] < 1: # enemy won
                         self.enemy_won()
                     else:
                         self.player_turn = not(self.player_turn)
                 else:
-                    self.dmg_text, other = self.animal.perform_attack(self.enemy, self.list_of_moves[num], self.minigame_success)
+                    self.dmg_text = self.animal.perform_attack(self.enemy, self.list_of_moves[num], self.minigame_success)
                     self.minigame_success = False
-                    self.player_got_dmg_delt = isinstance(other, Animal)
-                    self.dmg_text_cooldown = time() + 0.5
-                    self.cooldown = time() + 1
-                    player_won = True if self.enemy.battle_stats[Stats.HEALTH] < 1 else False
+                    self.player_got_dmg_delt = False
+                    self.do_cooldown()
                     self.printed_message = self.info_message["enemy_turn"]
-                    if player_won:
+                    if self.enemy.battle_stats[Stats.HEALTH] < 1: # player won
                         self.player_won()
                     else:
                         self.player_turn = not(self.player_turn)
@@ -196,7 +186,7 @@ class BattleScreen():
                         self.update_manager()
                 if name == "backpack":
                     self.show_backpack = True
-                if name == "info" and not self.minigame_used:
+                if name == "minigame" and not self.minigame_used:
                     self.minigame = self.animal.minigame(self.display)
                     self.minigame_used = True
     
@@ -224,6 +214,14 @@ class BattleScreen():
         self.printed_message = self.info_message["enemy_won"]
         self.fainted = True
         print("Enemy won")
+
+    
+    def sb_fainted(self):
+        self.rotate_angl += 10
+        if self.animal.battle_stats[Stats.HEALTH] < 1:
+            self.display.blit(pygame.transform.rotate(self.animal.img, self.rotate_angl), (int(self.display.get_width() * 0.05), 40))
+        elif self.enemy.battle_stats[Stats.HEALTH] < 1:
+            self.display.blit(pygame.transform.rotate(self.enemy.img, self.rotate_angl), (int(self.display.get_width() * 0.55), 40))
                 
 
     def render_extra_window(self):
@@ -244,6 +242,11 @@ class BattleScreen():
                 self.player_buttons['run'].changed = False  # niefortunnie ostatnim zdarzeniem jest kliknięcie tuż nad run i liczy to jako run XD
                 self.minigame = None
                 self.minigame_success = success
+
+
+    def do_cooldown(self):
+        self.dmg_text_cooldown = time() + 0.5
+        self.cooldown = time() + 1
 
 
     def is_player_paused(self):
@@ -271,14 +274,4 @@ class BattleScreen():
         # self.sound_manager.play_music("game")
         self.game_state_manager.set_state(state)
 
-"""
-1. Statystyki z sześciokątem po kliknięciu na strzałkę rozwinięcia podczas walki (3 warstwy - battle_stats, stats, max_stats)
-2. Dodać sześciokąt do info zwierzaka
-3. Przycisk "i" objaśnia co robi dana statystyka + (special atattack mby)
-4. Informacje co kiedy się dzieje + "Enemy turn"
-5. Fainted
-6. Sounds
-7. Background battle
-8. Minigame
-9. Optymalizacja wszystkiego - żeby się przyjemnie grało
-"""
+# Pomysł: Gdy player ma big_critical_dmg (z minigierki) zmienia się jego wygląd na taki szybki i niebezpieczny >:))

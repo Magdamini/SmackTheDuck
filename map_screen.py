@@ -169,7 +169,7 @@ class MapScreen:
                     if not self.is_player_paused() and self.boss.touch_player:
                         print("walka z bossem")
                         self.movement = [False, False, False, False]
-                        self.game.states[GameStates.BATTLE] = HonkBattleScreen(self.display, self.game_state_manager, self.animal, self.player.backpack, self.boss)
+                        self.game.states[GameStates.BATTLE] = HonkBattleScreen(self.display, self.game_state_manager, self.animal, self.player.backpack, self.boss, self.game, True)
                         self.battle_detector.update_manager()
                         
                 if event.key == pygame.K_q:

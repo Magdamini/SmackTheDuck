@@ -1,5 +1,4 @@
 from random import randint
-from scripts.fighter import Fighter
 from game_states import GameStates
 
 
@@ -21,7 +20,7 @@ class Battle_detector:
         self.battle_tile_loc = (int((self.player.pos[0] + self.player.size[0] // 2) // self.tilemap.tile_size), int((self.player.pos[1] + self.player.size[1] // 2) // self.tilemap.tile_size))
         player_rect = self.player.rect()
         for rect in self.tilemap.battle_rects_around(self.player.pos):
-            if player_rect.colliderect(rect) and self.battle_tile_loc != self.previous_battle_tile_loc and self.battle_chances(20):
+            if player_rect.colliderect(rect) and self.battle_tile_loc != self.previous_battle_tile_loc and self.battle_chances():
                 self.previous_battle_tile_loc = self.battle_tile_loc
                 return True
         self.previous_battle_tile_loc = self.battle_tile_loc
