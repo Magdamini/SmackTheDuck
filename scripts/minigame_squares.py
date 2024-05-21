@@ -1,6 +1,9 @@
 from scripts.minigame import MiniGameStates, MiniGame
+from scripts.utils import Button, load_image
 from random import randint
 import pygame
+
+SUBMIT_BUTTON_SIZE = [size * 2 for size in (34, 14)]
 
 class MinigameSquares(MiniGame):
     def __init__(self, surf):
@@ -8,6 +11,11 @@ class MinigameSquares(MiniGame):
         desc = "Remember the positions of the blue\n squares and them click on them"
         super().__init__(desc, name, surf)
         
+        self.buttons[MiniGameStates.PLAY] = Button(self.background.right - SUBMIT_BUTTON_SIZE[0] - self.button_offset, self.background.bottom - SUBMIT_BUTTON_SIZE[1] - self.button_offset,
+                                                pygame.transform.scale(load_image("buttons/submit.png"), (SUBMIT_BUTTON_SIZE[0], SUBMIT_BUTTON_SIZE[1])))
+        
+        
+        print(self.buttons)
         self.square_size = 24
         self.rows = 5
         self.cols = 8
@@ -79,7 +87,7 @@ class MinigameSquares(MiniGame):
         pygame.draw.rect(self.surf, (0, 0, 0),  sq_background, self.border_width)
         
         
-    def render_game(self, scale, curr_y):
+    def render_game(self, scale):
         curr_button = self.buttons.get(self.curr_state)
         if curr_button is not None: curr_button.render(self.surf, scale)
         

@@ -13,7 +13,7 @@ class MiniGameStates(Enum):
 
 
 START_BUTTON_SIZE = [size * 2 for size in (30, 14)]
-SUBMIT_BUTTON_SIZE = [size * 2 for size in (34, 14)]
+
 EXIT_BUTTON_SIZE = [size * 2 for size in (22, 14)]
 
 class MiniGame(ABC):
@@ -44,8 +44,6 @@ class MiniGame(ABC):
         self.button_offset = 5
         self.buttons = {MiniGameStates.START: Button(self.background.right - START_BUTTON_SIZE[0] - self.button_offset, self.background.bottom - START_BUTTON_SIZE[1] - self.button_offset,
                                                 pygame.transform.scale(load_image("buttons/start.png"), (START_BUTTON_SIZE[0], START_BUTTON_SIZE[1]))),
-                        MiniGameStates.PLAY: Button(self.background.right - SUBMIT_BUTTON_SIZE[0] - self.button_offset, self.background.bottom - SUBMIT_BUTTON_SIZE[1] - self.button_offset,
-                                                pygame.transform.scale(load_image("buttons/submit.png"), (SUBMIT_BUTTON_SIZE[0], SUBMIT_BUTTON_SIZE[1]))),
                         MiniGameStates.END: Button(self.background.right - EXIT_BUTTON_SIZE[0] - self.button_offset, self.background.bottom - EXIT_BUTTON_SIZE[1] - self.button_offset,
                                                 pygame.transform.scale(load_image("buttons/exit.png"), (EXIT_BUTTON_SIZE[0], EXIT_BUTTON_SIZE[1])))
                    }
@@ -82,11 +80,11 @@ class MiniGame(ABC):
     def render(self, scale):
         self.render_background()
         curr_y = self.render_header()
-        self.render_game(scale, curr_y)
+        self.render_game(scale)
     
     
     @abstractmethod
-    def render_game(self, scale, curr_y):
+    def render_game(self, scale):
         pass
     
         

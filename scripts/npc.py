@@ -232,7 +232,7 @@ class DialogueWindow:
             items.remove("14")
             new_item_type = choice(items)
             new_item = ITEM_TYPES[new_item_type](0, 0)
-            self.extra_line = f"[{self.name} gives you {new_item.name}]"
+            self.extra_line = f"[{self.namesplit()[1]} gives you {new_item.name}]"
             self.backpack.update(new_item)
             self.curr_line += 1
 

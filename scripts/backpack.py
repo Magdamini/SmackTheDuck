@@ -1,5 +1,5 @@
 import pygame
-from scripts.utils import Button
+from scripts.utils import Button, text_image
 
 ROWS = 3
 COLUMNS = 5
@@ -36,8 +36,7 @@ class Backpack:
         curr_y = background.y + 4
         
         
-        big_text_font = pygame.font.Font("data/fonts/Retro.ttf", size=16)
-        backpack_text = big_text_font.render("Backpack", True, "black")
+        backpack_text = text_image("Backpack", 16)
         surf.blit(backpack_text, (background.centerx - backpack_text.get_width() // 2, curr_y))
         left = background.x + self.border_offset
         curr_y += backpack_text.get_height() + 4
@@ -62,8 +61,7 @@ class Backpack:
                 if i < len(curr_items):
                     if self.render_item(surf, curr_items[i], curr_spot, col, row, scale):   # myszka jest nad obrazkiem
                         item = self.items[curr_items[i]][1]
-                        text_font = pygame.font.Font("data/fonts/Retro.ttf", size=10)
-                        item_text = text_font.render(f'{item.name}: {item.desc}', True, "black")
+                        item_text = text_image(f'{item.name}: {item.desc}', 10)
                         text_rect = pygame.Rect(0, 0, item_text.get_width(), item_text.get_height())
                         text_rect.centerx = background.centerx
                         text_rect.bottom = background.bottom - self.border_offset
@@ -98,8 +96,7 @@ class Backpack:
         if row == 0: offset_y += self.border_width // 2
         
         quantity = self.items[item][0]
-        text_font = pygame.font.Font("data/fonts/Retro.ttf", size=12)
-        text = text_font.render(str(quantity), True, "black")
+        text = text_image(str(quantity), 12)
         
         surf.blit(text, (curr_spot.x + offset_x, curr_spot.y + offset_y))
         

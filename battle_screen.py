@@ -240,6 +240,7 @@ class BattleScreen():
             finished, success = self.minigame.is_finished()
             if finished:
                 self.player_buttons['run'].changed = False  # niefortunnie ostatnim zdarzeniem jest kliknięcie tuż nad run i liczy to jako run XD
+                self.player_buttons['backpack'].changed = False
                 self.minigame = None
                 self.minigame_success = success
 

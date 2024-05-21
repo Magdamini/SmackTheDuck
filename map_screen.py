@@ -13,6 +13,7 @@ from scripts.item_collector import ItemCollector
 from scripts.level_manager import LevelManager
 from scripts.npc import NPCManager, DialogueWindow
 from scripts.honk import Boss
+from scripts.help import HelpWindow
 
 class MapScreen:
     def __init__(self, display, game_state_manager, animal, player_type, game):
@@ -84,6 +85,8 @@ class MapScreen:
         self.show_animal_stats = False
         self.new_level_window = None
         self.dialogue_window = None
+        self.help_window = HelpWindow()
+        self.help = True
 
         self.had_battle = False
 
@@ -96,6 +99,8 @@ class MapScreen:
             self.player.update(self.tilemap, (self.movement[1] - self.movement[0], self.movement[3] - self.movement[2]))
             self.map_handler.change_map(self.level_manager.level)
             self.camera.update()
+        else:
+            self.movement = [False, False, False, False]
         
         self.item_collector.collect_items(self.tilemap)
         
@@ -108,6 +113,7 @@ class MapScreen:
 
         if self.handle_battle():
             self.had_battle = True
+            
         
         # update xp
         new_lvl = self.level_manager.update(xp, self.map_handler.maps)
@@ -131,6 +137,7 @@ class MapScreen:
         npc = self.npc_manager.talk_with_npc(self.display, self.camera.pos, self.player, self.map_handler.curr_map)
 
         self.render_extra_window()
+        
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -176,7 +183,13 @@ class MapScreen:
                     self.show_backpack = False
                     self.show_animal_stats = False
                     self.active_npc = None
+                    self.help = False
+                
+                if event.key == pygame.K_h:
+                    if (not self.help and not self.is_player_paused()) or self.help:
+                        self.help = not self.help
                     
+                # TODO delete xp
                 if event.key == pygame.K_x:
                     if not self.is_player_paused():
                         xp = 5 * self.level_manager.level
@@ -200,6 +213,11 @@ class MapScreen:
                     self.movement[3] = False
                 if event.key == pygame.K_LSHIFT:
                     self.player.running = False
+                    
+        
+        if self.had_battle:
+            self.movement = [False, False, False, False]
+            
         
     
     def render_extra_window(self):
@@ -209,10 +227,8 @@ class MapScreen:
                 self.new_level_window = None
                 
         elif self.show_backpack:
-            self.player.backpack.render(self.display, self.game_state_manager.scale, True)
+            self.player.backpack.render(self.display, self.game_state_manager.scale, False)
             
-            # TODO - do usunięcia -> możesz zobaczyć jak działa branie przedmiotów
-            # self.player.backpack.get_clicked_item(self.display, self.game_state_manager.scale)
             
         elif self.show_animal_stats:
             self.animal.render_statistics(self.display)
@@ -221,17 +237,21 @@ class MapScreen:
             self.dialogue_window.render_dialogue(self.display, self.game_state_manager.scale)
             if self.dialogue_window.dialogue_end():
                 self.dialogue_window = None
+                
+        if self.help:
+            self.help_window.render(self.display)
 
 
     def is_player_paused(self):
-        return self.show_backpack or self.show_animal_stats or self.new_level_window is not None or self.dialogue_window is not None
+        return self.show_backpack or self.show_animal_stats or \
+            self.new_level_window is not None or self.dialogue_window is not None or self.help
 
 
     def handle_battle(self):
         if self.battle_detector.detect_battle():
             # self.sound_manager.stop_music()
-            self.movement = [False, False, False, False]
             self.game.states[GameStates.BATTLE] = BattleScreen(self.display, self.game_state_manager, self.animal, self.player.backpack)
             self.battle_detector.update_manager()
+            
             return True
         return False

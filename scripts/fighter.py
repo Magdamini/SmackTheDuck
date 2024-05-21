@@ -14,9 +14,9 @@ class Fighter:
         self.stats = {Stats.HEALTH: health,
                       Stats.ATTACK: attack,
                       Stats.DEFENCE: defence,
-                      Stats.CRITICAL_DMG: critical_dmg,
                       Stats.AGILITY: agility,
-                      Stats.LUCK: luck}
+                      Stats.LUCK: luck,
+                      Stats.CRITICAL_DMG: critical_dmg}
         self.moves = moves
         self.lvl = level
 

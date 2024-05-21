@@ -30,7 +30,7 @@ class MinigameSchoot(MiniGame):
         self.check_cooldown = time()
         self.do_we_check = False
 
-        self.buttons[MiniGameStates.WAIT] = self.buttons[MiniGameStates.PLAY]
+        # self.buttons[MiniGameStates.WAIT] = self.buttons[MiniGameStates.PLAY]
         
     
     def rand_squares(self, n=10):
@@ -83,7 +83,7 @@ class MinigameSchoot(MiniGame):
         pygame.draw.rect(self.surf, (0, 0, 0), sq_background, self.border_width)
         
         
-    def render_game(self, scale, curr_y):
+    def render_game(self, scale):
         curr_button = self.buttons.get(self.curr_state)
         if curr_button is not None:
             curr_button.render(self.surf, scale)
@@ -97,7 +97,7 @@ class MinigameSchoot(MiniGame):
 
         elif self.curr_state == MiniGameStates.WAIT:
             self.draw_squares(scale, [])
-            if self.round_num > self.rounds - 1 or self.buttons[MiniGameStates.WAIT].is_clicked(): # koniec minigry
+            if self.round_num > self.rounds - 1: # koniec minigry
                 self.success = bool(self.won_rounds == self.rounds)
                 self.curr_state = MiniGameStates.END
             if self.cooldown < time():
@@ -125,7 +125,7 @@ class MinigameSchoot(MiniGame):
                     self.cooldown = time() + ROUND_TIME
                     self.round_num += 1
 
-            if self.round_num > self.rounds - 1 or self.buttons[MiniGameStates.PLAY].is_clicked(): # koniec minigry
+            if self.round_num > self.rounds - 1: # koniec minigry
                 self.success = bool(self.won_rounds == self.rounds)
                 self.curr_state = MiniGameStates.END
 

@@ -1,6 +1,7 @@
 import pygame
 from random import randint
 from scripts.fighter_statictics import Stats
+from scripts.utils import text_image
 
 MAX_LVL = 15
 BAR_OFFESET = 10
@@ -31,8 +32,7 @@ class LevelManager:
         pygame.draw.rect(surf, (255, 255, 255), background) 
         pygame.draw.rect(surf, (0, 0, 0),  background, self.border_width)
         
-        text_font = pygame.font.Font("data/fonts/Retro.ttf", size=10)
-        lvl_text = text_font.render("Lvl. " + str(self.level), True, "black")
+        lvl_text = text_image("Lvl. " + str(self.level), 10)
         surf.blit(lvl_text, ((self.width - lvl_text.get_width()) // 2, self.border_width))
         
         xp_bar = pygame.Rect(0, 0, self.bar_width, self.bar_height)   
@@ -46,7 +46,7 @@ class LevelManager:
         pygame.draw.rect(surf, (105, 245, 66), xp_curr)
         pygame.draw.rect(surf, (0,0,0), xp_bar, width=1)
         
-        xp_text = text_font.render(str(self.xp) + "/" + str(next_xp), True, "black")
+        xp_text = text_image(str(self.xp) + "/" + str(next_xp), 10)
         surf.blit(xp_text, (xp_bar.centerx - xp_text.get_width() // 2, xp_bar.y + 1))
         
 
@@ -61,7 +61,7 @@ class LevelManager:
             else: self.xp = 0
             
             # ile nowych przedmiotów
-            new_items = round(len(available_maps))
+            new_items = len(available_maps)
             
             self.item_collector.new_random_items(available_maps, new_items)
             return NewLevelWindow(self.level, self.animal)
@@ -97,16 +97,14 @@ class NewLevelWindow:
         pygame.draw.rect(surf, (0, 0, 0),  background, self.border_width)
         curr_y = background.y + 8
         
-        big_text_font = pygame.font.Font("data/fonts/Retro.ttf", size=16)
-        lvl_text = big_text_font.render("Level Up!", True, "black")
+        lvl_text = text_image("Level Up!", 16)
         surf.blit(lvl_text, (background.centerx - lvl_text.get_width() // 2, curr_y))
         left = background.x + self.border_offset
         
         curr_y += 10 + lvl_text.get_height()
         
-        text_font = pygame.font.Font("data/fonts/Retro.ttf", size=10)
         for stat, val in self.upgrade_stats:
-            stat_text = text_font.render(f"+{val} {stat.value}", True, "black")
+            stat_text = text_image(f"+{val} {stat.value}", 10)
             surf.blit(stat_text, (left, curr_y))
             curr_y += 3 + stat_text.get_height()
         
@@ -116,13 +114,13 @@ class NewLevelWindow:
         pygame.draw.line(surf, (0, 0, 0), (left - line_offset, curr_y), (background.right - self.border_offset + line_offset, curr_y))
         curr_y += 7
         
-        choose_text = big_text_font.render(f"Select:", True, "black")
+        choose_text = text_image("Select:", 16)
         surf.blit(choose_text, (background.centerx - choose_text.get_width() // 2, curr_y))
         curr_y += 5 + choose_text.get_height()
         
         texts = []
         for stat, val in self.rand_stats:
-            stat_text = text_font.render(f"+{val} {stat.value}", True, "black")
+            stat_text = text_image(f"+{val} {stat.value}", 10)
             texts.append((stat_text, left, curr_y))
             surf.blit(stat_text, (left, curr_y))
             curr_y += 3 + stat_text.get_height()
@@ -166,10 +164,4 @@ class NewLevelWindow:
             if self.chosen_stat is not None:
                 self.animal.stats[self.chosen_stat[0]] += self.chosen_stat[1]
         return self.finish
-                    
-    #     self.health = randint(8*level, 11*level)
-    #     self.attack = randint(2*level, 3*level)
-    #     self.defence = randint(level, int(level*1.5))
-    #     self.critical_dmg = randint(0, 10)
-    #     self.agility = randint(level, int(level*1.5))
-    #     self.luck = randint(0, 10)
+

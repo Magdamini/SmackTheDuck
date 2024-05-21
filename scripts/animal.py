@@ -1,6 +1,6 @@
 import pygame
 
-from scripts.utils import load_image
+from scripts.utils import load_image, text_image
 from scripts.fighter import Fighter
 
 
@@ -31,8 +31,8 @@ class Animal(Fighter):
         pygame.draw.rect(surf, (0, 0, 0),  background, self.border_width)
         curr_y = background.y + 8
         
-        big_text_font = pygame.font.Font("data/fonts/Retro.ttf", size=16)
-        title_text = big_text_font.render("Pet Statistics", True, "black")
+        title_text = text_image("Pet Statistics", size=16)
+        
         surf.blit(title_text, (background.centerx - title_text.get_width() // 2, curr_y))
         left = background.x + self.border_offset
         
@@ -42,9 +42,8 @@ class Animal(Fighter):
         pygame.draw.line(surf, (0, 0, 0), (left - line_offset, curr_y), (background.right - self.border_offset + line_offset, curr_y))
         curr_y += 4
         
-        text_font = pygame.font.Font("data/fonts/Retro.ttf", size=10)
         for stat, val in self.stats.items():
-            stat_text = text_font.render(f"{stat.value}: {val}", True, "black")
+            stat_text = text_image(f"{stat.value}: {val}", size=10)
             surf.blit(stat_text, (left, curr_y))
             curr_y += 3 + stat_text.get_height()
         
