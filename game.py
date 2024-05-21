@@ -9,7 +9,6 @@ from story_screen import StoryScreen
 from game_states import GameStates
 
 
-
 class Game:
     def __init__(self):        
         pygame.init()
@@ -38,8 +37,8 @@ class Game:
                     #    GameStates.MAP: self.map_screen,
                        GameStates.SELECT_ANIMAL: self.select_animal_screen,
                        GameStates.END: self.end_screen}
-        
-        
+
+
     def run(self):
         while True:    
             self.states[self.game_state_manager.get_state()].run()
@@ -64,7 +63,3 @@ class GameStateManager:
 
 if __name__ == '__main__':
     Game().run()
-
-
-# TODO after work change
-# -> map_handler - start level map
