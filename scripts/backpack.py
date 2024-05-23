@@ -17,7 +17,6 @@ class Backpack:
         self.width = self.spot_size * COLUMNS + 4 * self.border_offset
         self.height = self.border_offset * 6 + self.spot_size * ROWS
         self.border_width = 2
-        
 
         
     def update(self, new_item):
@@ -26,7 +25,8 @@ class Backpack:
             self.items[new_item.name] = [1, new_item, Button(0, 0, new_item.img)]
         else:
             self.items[new_item.name][0] += 1
-    
+
+
     def render(self, surf, scale, get_item=False):
         item_to_ret = None
         background = pygame.Rect(0, 0, self.width, self.height)
@@ -35,12 +35,10 @@ class Backpack:
         pygame.draw.rect(surf, (0, 0, 0),  background, self.border_width)
         curr_y = background.y + 4
         
-        
         backpack_text = text_image("Backpack", 16)
         surf.blit(backpack_text, (background.centerx - backpack_text.get_width() // 2, curr_y))
         left = background.x + self.border_offset
         curr_y += backpack_text.get_height() + 4
-        
         
         backpack = pygame.Rect(left, curr_y, self.spot_size * COLUMNS, self.spot_size * ROWS)
         backpack.centerx = background.centerx
@@ -76,7 +74,6 @@ class Backpack:
                                 self.last_click = False
                                             
                 i += 1
-        
 
         pygame.draw.rect(surf, (0, 0, 0), backpack, self.border_width)
         return item_to_ret
@@ -102,7 +99,6 @@ class Backpack:
         
         pos = [p // scale for p in pygame.mouse.get_pos()]
         return item_rect.collidepoint(pos)
-        
     
             
     def remove_item(self, item_name):

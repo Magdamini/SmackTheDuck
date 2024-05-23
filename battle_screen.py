@@ -9,7 +9,7 @@ from scripts.enemy import Enemy
 from scripts.animal import Animal
 from scripts.fighter_statictics import Stats
 from scripts.items import Stones
-from random import randint
+from random import randint, sample
 
 # from scripts.minigame_squares import MinigameSquares
 # from scripts.minigame_shoot import MinigameShoot
@@ -17,8 +17,9 @@ from random import randint
 ATTACK_BUTTON_SIZE = [56*2, 14*2]
 SMALL_BUTTON_SIZE = [28, 28]
 FIGHTER_SIZE = [128, 128]
-LUCK_CONVERSION_RATE = 5
+LUCK_CONVERSION_RATE = 2.5
 AGILITY_CONVERSION_RATE = 5
+BASIC_CHANCE_TO_RUN_AWAY = 33
 
 
 class BattleScreen():
@@ -62,7 +63,8 @@ class BattleScreen():
                              "enemy_won": load_image("messages/enemy_won.png"),
                              "player_got_lucky": load_image("messages/player_got_lucky.png"),
                              "enemy_got_lucky": load_image("messages/enemy_got_lucky.png"),
-                             "fight": load_image("messages/fight.png"),}
+                             "fight": load_image("messages/fight.png"),
+                             "running_away_failed": load_image("messages/running_away_failed.png"),}
         self.printed_message = self.info_message["fight"]
 
         self.cooldown = time() + 1
@@ -100,7 +102,7 @@ class BattleScreen():
             self.show_more_info_is_clicked = self.handle_show_more_buttons()
 
         if time() > self.cooldown:
-            if self.fainted:
+            if self.fainted: # battle ended
                 self.update_manager()
                 self.enemy = None
                 return
@@ -140,12 +142,12 @@ class BattleScreen():
                         self.enemy_won()
                     else:
                         self.player_turn = not(self.player_turn)
-        else:
+        else: # wait while cooldown
             self.display.blit(self.printed_message, (10, self.display.get_height() - 2*ATTACK_BUTTON_SIZE[1] - 10))
             if self.fainted:
                 self.sb_fainted()
         
-        if time() < self.dmg_text_cooldown:
+        if time() < self.dmg_text_cooldown: # showing dmg delt to sb
             if self.player_got_dmg_delt:
                 self.display.blit(self.dmg_text, (int(self.display.get_width() * 0.25), 80))
             else:
@@ -154,7 +156,7 @@ class BattleScreen():
     
     def handle_attack_buttons(self):
         for num, button in self.attack_buttons.items():
-            if button.is_clicked():
+            if button.is_clicked() and time() > self.cooldown:
                 if self.enemy.battle_stats[Stats.LUCK] * LUCK_CONVERSION_RATE > randint(0, 99): # animal will hit himself due to enemy's luck
                     print("Enemy's luck")
                     self.dmg_text = self.animal.perform_attack(self.animal, self.list_of_moves[num])
@@ -182,8 +184,13 @@ class BattleScreen():
         for name, button in self.player_buttons.items():
             if button.is_clicked():
                 if name == "run":
-                    if 50 + self.animal.battle_stats[Stats.AGILITY] * AGILITY_CONVERSION_RATE > randint(0, 99):
+                    if BASIC_CHANCE_TO_RUN_AWAY + self.animal.battle_stats[Stats.AGILITY] * AGILITY_CONVERSION_RATE > randint(0, 99):
                         self.update_manager()
+                    else:
+                        self.printed_message = self.info_message["running_away_failed"]
+                        print("Running away failed")
+                        self.cooldown = time() + 1
+                        self.player_turn = not(self.player_turn)
                 if name == "backpack":
                     self.show_backpack = True
                 if name == "minigame" and not self.minigame_used:
@@ -260,12 +267,17 @@ class BattleScreen():
         rand_enemy_moves = enemies_data[rand_enemy_img]
         level = randint(self.animal.lvl-1, self.animal.lvl+1)
         if level == 0: level = 1
-        health = randint(4*level, 5*level)
-        attack = randint(2, 3*level)
-        defence = randint(0, 2*level)
-        critical_dmg = randint(0, 2)
-        agility = randint(0, level)
-        luck = randint(0, 2)
+
+        health = randint(4*level + 5, 5*level + 5)
+        attack = randint(3*level-5, 4*level-5) if level > 2 else randint(2, 4) if level > 1 else randint(1, 2)
+        defence = randint(1*level, 3*level) if level > 1 else randint(1, 2)
+       
+        extra_stats_sum = 2*level - 2 if level > 5 else level + 2
+        extra_stats = [0] + sorted(sample(range(0, extra_stats_sum+1), 2)) + [extra_stats_sum]
+        critical_dmg = extra_stats[1] - extra_stats[0]
+        agility = extra_stats[2] - extra_stats[1]
+        luck = extra_stats[3] - extra_stats[2]
+
         self.enemy = Enemy(rand_enemy_img, health, attack, defence, critical_dmg, agility, luck, rand_enemy_moves, level=level)
         self.enemy.battle_stats = self.enemy.stats.copy()
 
