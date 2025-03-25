@@ -56,7 +56,6 @@ class SelectAnimalScreen(SelectScreen):
 
         self.game = game
 
-        # draw
         self.border_offset = 10
 
     def get_minigame(self, i):

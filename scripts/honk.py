@@ -2,7 +2,6 @@ from scripts.enemy import Enemy
 from scripts.utils import text_image, load_image
 import pygame
 
-# TODO dać statsy i moves bo nie wiem co to xd
 MOVES = {"attack": [1, 0, 0]}
 
 

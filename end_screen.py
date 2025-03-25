@@ -19,7 +19,6 @@ class EndScreen:
         )
 
     def run(self):
-        # self.display.fill((0, 0, 0))
         self.display.fill((255, 255, 255))
 
         for event in pygame.event.get():

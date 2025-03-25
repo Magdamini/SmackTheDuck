@@ -18,7 +18,6 @@ class Item:
         fighter.battle_stats[battle_stat] += how_much
 
 
-# TODO check names
 class Plaster(Item):
     def __init__(self, x, y):
         super().__init__(x, y, "00", "Plaster")

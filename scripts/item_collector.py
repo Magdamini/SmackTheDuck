@@ -21,7 +21,7 @@ class ItemCollector:
                 self.player.backpack.update(item)
 
     # maps -> słownik map z map_handlera
-    # w jaskini bossa się nic nie pojawia
+    # w jaskini bossa nie pojawiają się itemy
     def new_random_items(self, available_maps, no_new_items=1):
         sizes = [
             ((m.bounds[0][1] - m.bounds[0][0]) * (m.bounds[1][1] - m.bounds[1][0]), k)

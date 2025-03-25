@@ -3,7 +3,6 @@ import sys
 
 from scripts.utils import Button, load_image, text_image
 
-# obrazek png: 35, 14
 PNG_SIZE = [35, 14]
 BUTTON_SIZE = [size * 3 for size in PNG_SIZE]
 
@@ -17,7 +16,6 @@ class SelectScreen:
         self.img_size = size
         self.next_state = next_state
 
-        # draw
         self.title = text_image("SELECT " + title.upper(), 20, "data/fonts/Retro.ttf")
         self.subtitle = text_image(
             "use arrows to change character", 10, "data/fonts/Retro.ttf"

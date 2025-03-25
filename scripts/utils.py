@@ -35,7 +35,6 @@ def text_image(text, size, font="data/fonts/Retro.ttf", color=(0, 0, 0)):
 
 def get_filename_without_extension(path):
     filename = os.path.basename(path)
-    # Usunięcie rozszerzenia pliku
     filename_without_extension = os.path.splitext(filename)[0]
     return filename_without_extension
 

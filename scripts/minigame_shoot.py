@@ -31,8 +31,6 @@ class MinigameSchoot(MiniGame):
         self.check_cooldown = time()
         self.do_we_check = False
 
-        # self.buttons[MiniGameStates.WAIT] = self.buttons[MiniGameStates.PLAY]
-
     def rand_squares(self, n=10):
         cnt = 0
         while cnt < n:

@@ -13,7 +13,6 @@ class StartScreen:
         self.subtitle = text_image("Use any key to start", 10, "data/fonts/Retro.ttf")
 
     def run(self):
-        # self.display.fill((0, 0, 0))
         self.display.fill((255, 255, 255))
 
         for event in pygame.event.get():

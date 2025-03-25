@@ -14,7 +14,7 @@ class Battle_detector:
         rand_num = randint(0, 99)
         return rand_num < chance_of_battle
 
-    def detect_battle(self):  # TODO polish this
+    def detect_battle(self):
         self.battle_tile_loc = (
             int(
                 (self.player.pos[0] + self.player.size[0] // 2)

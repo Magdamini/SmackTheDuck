@@ -58,8 +58,6 @@ class Editor:
             "Items": load_images("tiles/Items"),
         }
 
-        # self.assets TODO (better)
-
         self.movement = [False, False, False, False]
 
         self.tilemap = Tilemap(self, tile_size=16)

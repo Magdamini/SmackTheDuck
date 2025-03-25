@@ -11,9 +11,6 @@ from scripts.fighter_statictics import Stats
 from scripts.items import Stones
 from random import randint, sample
 
-# from scripts.minigame_squares import MinigameSquares
-# from scripts.minigame_shoot import MinigameShoot
-
 ATTACK_BUTTON_SIZE = [56 * 2, 14 * 2]
 SMALL_BUTTON_SIZE = [28, 28]
 FIGHTER_SIZE = [128, 128]
@@ -141,7 +138,7 @@ class BattleScreen:
 
         self.cooldown = time() + 1
         self.fainted = False
-        self.rotate_angl = 0  # TODO delete in the future if Magda won't like the fainted animation xdddd
+        self.rotate_angl = 0
         self.dmg_text = None
         self.dmg_text_cooldown = time()
         self.player_got_dmg_delt = True
@@ -362,14 +359,11 @@ class BattleScreen:
                 else:
                     item_clicked.use(self.animal)
 
-        # do testowania minigierki
         elif self.minigame is not None:
             self.minigame.render(self.game_state_manager.scale)
             finished, success = self.minigame.is_finished()
             if finished:
-                self.player_buttons["run"].changed = (
-                    False  # niefortunnie ostatnim zdarzeniem jest kliknięcie tuż nad run i liczy to jako run XD
-                )
+                self.player_buttons["run"].changed = False
                 self.player_buttons["backpack"].changed = False
                 self.minigame = None
                 self.minigame_success = success
@@ -424,6 +418,3 @@ class BattleScreen:
         # self.sound_manager.stop_music()
         # self.sound_manager.play_music("game")
         self.game_state_manager.set_state(state)
-
-
-# Pomysł: Gdy player ma big_critical_dmg (z minigierki) zmienia się jego wygląd na taki szybki i niebezpieczny >:))
