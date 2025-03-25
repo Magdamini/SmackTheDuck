@@ -7,21 +7,35 @@ import math
 
 DMG_FONT_SIZE = 32
 
+
 class Fighter:
-    def __init__(self, img, health, attack, defence, critical_dmg, agility, luck, moves, level, size=64):
+    def __init__(
+        self,
+        img,
+        health,
+        attack,
+        defence,
+        critical_dmg,
+        agility,
+        luck,
+        moves,
+        level,
+        size=64,
+    ):
         self.name = get_filename_without_extension(img)
         self.img = pygame.transform.scale(load_image(img), (size, size))
-        self.stats = {Stats.HEALTH: health,
-                      Stats.ATTACK: attack,
-                      Stats.DEFENCE: defence,
-                      Stats.AGILITY: agility,
-                      Stats.LUCK: luck,
-                      Stats.CRITICAL_DMG: critical_dmg}
+        self.stats = {
+            Stats.HEALTH: health,
+            Stats.ATTACK: attack,
+            Stats.DEFENCE: defence,
+            Stats.AGILITY: agility,
+            Stats.LUCK: luck,
+            Stats.CRITICAL_DMG: critical_dmg,
+        }
         self.moves = moves
         self.lvl = level
 
         self.battle_stats = None
-
 
     def perform_attack(self, other, move, power_up=False):
         times = 1
@@ -30,16 +44,26 @@ class Fighter:
 
         if power_up:
             times = 3
-            big_critical_dmg = True    
+            big_critical_dmg = True
 
         if self.battle_stats[Stats.CRITICAL_DMG] * 5 > randint(0, 99):
             times = 2
-            critical_dmg = True            
+            critical_dmg = True
 
-        dmg_blocked = other.battle_stats[Stats.DEFENCE] - self.moves[move][1] if other.battle_stats[Stats.DEFENCE] > self.moves[move][1] else 0
+        dmg_blocked = (
+            other.battle_stats[Stats.DEFENCE] - self.moves[move][1]
+            if other.battle_stats[Stats.DEFENCE] > self.moves[move][1]
+            else 0
+        )
 
-        if times * int(self.battle_stats[Stats.ATTACK] * self.moves[move][0]) > dmg_blocked:
-            dmg_delt = times * round(self.battle_stats[Stats.ATTACK] * self.moves[move][0]) - dmg_blocked 
+        if (
+            times * int(self.battle_stats[Stats.ATTACK] * self.moves[move][0])
+            > dmg_blocked
+        ):
+            dmg_delt = (
+                times * round(self.battle_stats[Stats.ATTACK] * self.moves[move][0])
+                - dmg_blocked
+            )
         else:
             dmg_delt = 0
         other.battle_stats[Stats.HEALTH] -= dmg_delt
@@ -68,17 +92,30 @@ class Fighter:
 
         dmg_text = self.get_dmg_text(dmg_delt, critical_dmg, big_critical_dmg)
         return dmg_text
-    
 
     def get_dmg_text(self, dmg_delt, critical_dmg, big_critical_dmg):
         if big_critical_dmg:
-            dmg_text = text_image(str(dmg_delt), DMG_FONT_SIZE + 20, "data/fonts/Retro.ttf", color=(255, 0, 0)) # big_critical_hit -> red
+            dmg_text = text_image(
+                str(dmg_delt),
+                DMG_FONT_SIZE + 20,
+                "data/fonts/Retro.ttf",
+                color=(255, 0, 0),
+            )  # big_critical_hit -> red
         elif critical_dmg:
-            dmg_text = text_image(str(dmg_delt), DMG_FONT_SIZE + 10, "data/fonts/Retro.ttf", color=(255, 0, 0)) # critical_hit -> red
+            dmg_text = text_image(
+                str(dmg_delt),
+                DMG_FONT_SIZE + 10,
+                "data/fonts/Retro.ttf",
+                color=(255, 0, 0),
+            )  # critical_hit -> red
         else:
-            dmg_text = text_image(str(dmg_delt), DMG_FONT_SIZE, "data/fonts/Retro.ttf", color=(0, 255, 255))
+            dmg_text = text_image(
+                str(dmg_delt),
+                DMG_FONT_SIZE,
+                "data/fonts/Retro.ttf",
+                color=(0, 255, 255),
+            )
         return dmg_text
-
 
     def render(self, surf, x, y, width=None, height=None):
         if width and height:
@@ -87,22 +124,21 @@ class Fighter:
         else:
             surf.blit(self.img, (x, y))
 
-
     def render_battle_statistics(self, surf, x, y):
         table_width = 120
         table_height = 38
         table_boarder_width = 2
         table_offset = 5
-    
+
         background = pygame.Rect(x, y, table_width, table_height)
         pygame.draw.rect(surf, (255, 255, 255), background)
-        pygame.draw.rect(surf, (0, 0, 0),  background, table_boarder_width)
+        pygame.draw.rect(surf, (0, 0, 0), background, table_boarder_width)
         curr_y = background.y + table_offset
-        text_font = pygame.font.Font("data/fonts/Retro.ttf", size=10)        
-        
+        text_font = pygame.font.Font("data/fonts/Retro.ttf", size=10)
+
         ################## LVL
         stat_text = text_font.render(f"LVL: {self.lvl}", True, "black")
-        surf.blit(stat_text, (x+table_offset, curr_y))
+        surf.blit(stat_text, (x + table_offset, curr_y))
         curr_y += 2 + stat_text.get_height()
 
         ################## HP
@@ -110,16 +146,19 @@ class Fighter:
         health_bar_height = 10
 
         stat_text = text_font.render("HP", True, "black")
-        surf.blit(stat_text, (x+table_offset, curr_y))
+        surf.blit(stat_text, (x + table_offset, curr_y))
         curr_y += 1
 
-        h_rect = pygame.Rect(x+24, curr_y, health_bar_width, health_bar_height)
+        h_rect = pygame.Rect(x + 24, curr_y, health_bar_width, health_bar_height)
         pygame.draw.rect(surf, (0, 0, 0), h_rect)
 
-        stat_len = round(self.battle_stats[Stats.HEALTH]/self.stats[Stats.HEALTH] * health_bar_width)
-        h_rect = pygame.Rect(x+24, curr_y, stat_len, health_bar_height)
-        pygame.draw.rect(surf, (255, 100, 100),  h_rect)
-
+        stat_len = round(
+            self.battle_stats[Stats.HEALTH]
+            / self.stats[Stats.HEALTH]
+            * health_bar_width
+        )
+        h_rect = pygame.Rect(x + 24, curr_y, stat_len, health_bar_height)
+        pygame.draw.rect(surf, (255, 100, 100), h_rect)
 
     def render_other_battle_statistics(self, surf, x, y):
         width = 120
@@ -128,11 +167,11 @@ class Fighter:
         border_offset = 5
 
         background = pygame.Rect(x, y, width, height)
-        pygame.draw.rect(surf, (255, 255, 255), background) 
-        pygame.draw.rect(surf, (0, 0, 0),  background, border_width)
+        pygame.draw.rect(surf, (255, 255, 255), background)
+        pygame.draw.rect(surf, (0, 0, 0), background, border_width)
         curr_y = background.y + border_offset
-        left = background.x + border_offset        
-        
+        left = background.x + border_offset
+
         text_font = pygame.font.Font("data/fonts/Retro.ttf", size=10)
 
         stat_names = ["Health", "Attack", "Defence", "Crit. damage", "Agility", "Luck"]
