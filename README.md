@@ -7,8 +7,8 @@ Olgierd Smyka, Magdalena Pabisz
 ## Overview
 **SmackTheDuck** is a 2D RPG game developed using **Python** and **Pygame**. The game was awarded the distinction of **Best Group Project** in the *Programming in Python* course at **AGH** (academic year 2023/24). Players embark on an adventurous journey through a vast world, engaging in turn-based combat, exploring diverse locations, interacting with NPCs, and leveling up their character. The game features a unique combat system, where players select a companion animal and participate in exciting mini-games during battles. Each mini-game, when won, increases the damage of the player's next attack, and the mini-game type differs depending on the chosen companion animal.
 
-## Features
-- **Vast World with Diverse Locations** :sunrise_over_mountains:
+## Most influential features
+- ### **Vast World with Diverse Locations** :sunrise_over_mountains:
 
 Explore different environments and uncover hidden secrets.
 <p align="center">
@@ -18,7 +18,7 @@ Explore different environments and uncover hidden secrets.
   <img src="data/images/readme/overview_ruins.png" alt="Overview 4" />
 </p>
 
-- **Turn-Based Combat System** :smirk_cat:
+- ### **Turn-Based Combat System** :smirk_cat:
 
 Players take turns with their companion animal to engage in strategic battles.
 <p align="center">
@@ -26,7 +26,7 @@ Players take turns with their companion animal to engage in strategic battles.
   <img src="data/images/readme/honk_battlescreen.png" alt="Battlescreen 2" />
 </p>
 
-- **Interactive NPCs** :shipit:
+- ### **Interactive NPCs** :shipit:
 
 Dialogue options allow players to interact with different NPCs.
 <p align="center">
@@ -35,7 +35,7 @@ Dialogue options allow players to interact with different NPCs.
   <img src="data/images/readme/NPC_talk_stranger.png" alt="NPC 3" />
 </p>
 
-- **Mini-Games for Special Attacks** :boom:
+- ### **Mini-Games for Special Attacks** :boom:
 
 Win mini-games to boost the damage of your next attack. The mini-game differs depending on the chosen companion animal.
 <p align="center">
@@ -43,14 +43,14 @@ Win mini-games to boost the damage of your next attack. The mini-game differs de
   <img src="data/images/readme/minigame_cat.png" alt="minigame 2" />
 </p>
 
-- **Leveling System**: :hatching_chick: :soon: :baby_chick:
+- ### **Leveling System**: :hatching_chick: :soon: :baby_chick:
 
 Gain experience points through battles, improving your companion's statistics.
 <p align="center">
   <img src="data/images/readme/leveling_system.png" alt="levelUp 2" />
 </p>
 
-- **Final Boss Battle** :facepunch:
+- ### **Final Boss Battle** :facepunch:
 
 Face a challenging boss to complete your journey.
 <p align="center">
