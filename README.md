@@ -7,7 +7,7 @@ Olgierd Smyka, Magdalena Pabisz
 ## Overview
 **SmackTheDuck** is a 2D RPG game developed using **Python** and **Pygame**. The game was awarded the distinction of **Best Group Project** in the *Programming in Python* course at **AGH** (academic year 2023/24). Players embark on an adventurous journey through a vast world, engaging in turn-based combat, exploring diverse locations, interacting with NPCs, and leveling up their character. The game features a unique combat system, where players select a companion animal and participate in exciting mini-games during battles. Each mini-game, when won, increases the damage of the player's next attack, and the mini-game type differs depending on the chosen companion animal.
 
-## Most influential features
+## Most Influential Features
 - ### **Vast World with Diverse Locations** :sunrise_over_mountains:
 
 Explore different environments and uncover hidden secrets.
