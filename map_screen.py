@@ -15,6 +15,7 @@ from scripts.npc import NPCManager, DialogueWindow
 from scripts.honk import Boss
 from scripts.help import HelpWindow
 
+
 class MapScreen:
     def __init__(self, display, game_state_manager, animal, player_type, game):
         self.display = display
@@ -25,61 +26,77 @@ class MapScreen:
         self.movement = [False, False, False, False]
 
         self.assets = {
-            'Cave': load_images('tiles/Cave'),
-            'CaveOutside': load_images('tiles/CaveOutside'),
-            'CaveOutside00': load_images('tiles/CaveOutside/00'),
-            'CaveOutside01': load_images('tiles/CaveOutside/01'),
-            'CaveOutside02': load_images('tiles/CaveOutside/02'),
-            'GrassFloor': load_images('tiles/GrassFloor'),
-            'GrassGoose': load_images('tiles/GrassGoose'),
-            'GrassTrees': load_images('tiles/GrassTrees'),
-            'GrassTrees00': load_images('tiles/GrassTrees/00'),
-            'GrassTrees01': load_images('tiles/GrassTrees/01'),
-            'GrassBuildings': load_images('tiles/GrassBuildings'),
-            'GrassBuildings00': load_images('tiles/GrassBuildings/00'),
-            'GrassBuildings01': load_images('tiles/GrassBuildings/01'),
-            'GrassBuildings02': load_images('tiles/GrassBuildings/02'),
-            'GrassBuildings03': load_images('tiles/GrassBuildings/03'),
-            'GrassBuildings04': load_images('tiles/GrassBuildings/04'),
-            'GrassBushes': load_images('tiles/GrassBushes'),
-            'GrassDecor': load_images('tiles/GrassDecor'),
-            'GrassDecor00': load_images('tiles/GrassDecor/00'),
-            'GrassDecor02': load_images('tiles/GrassDecor/02'),
-            'GrassDecor03': load_images('tiles/GrassDecor/03'),
-            'GrassIndoorDecor': load_images('tiles/GrassIndoorDecor'),
-            'GrassIndoorDecor05': load_images('tiles/GrassIndoorDecor/05'),
-            'GrassIndoorDecor06': load_images('tiles/GrassIndoorDecor/06'),
-            'GrassIndoorDecor07': load_images('tiles/GrassIndoorDecor/07'),
-            'GrassIndoorDecor08': load_images('tiles/GrassIndoorDecor/08'),
-            'WaterFloor': load_images('tiles/WaterFloor'),
-            'WaterCatwalk': load_images('tiles/WaterCatwalk'),
-            'HouseFloor': load_images('tiles/HouseFloor'),
-            'HouseIndoor': load_images('tiles/HouseIndoor'),
-            'HouseIndoor00': load_images('tiles/HouseIndoor/00'),
-            'HouseIndoor01': load_images('tiles/HouseIndoor/01'),
-            'Items': load_images('tiles/Items'),
-            
-            'player/' + PlayerActions.STANDING.value: Animation(load_images(f'player/{player_type}/' + PlayerActions.STANDING.value)),
-            'player/' + PlayerActions.UP.value: Animation(load_images(f'player/{player_type}/' + PlayerActions.UP.value)),
-            'player/' + PlayerActions.DOWN.value: Animation(load_images(f'player/{player_type}/' + PlayerActions.DOWN.value)),
-            'player/' + PlayerActions.RIGHT.value: Animation(load_images(f'player/{player_type}/' + PlayerActions.RIGHT.value)),
-            'player/' + PlayerActions.LEFT.value: Animation(load_images(f'player/{player_type}/' + PlayerActions.LEFT.value))
+            "Cave": load_images("tiles/Cave"),
+            "CaveOutside": load_images("tiles/CaveOutside"),
+            "CaveOutside00": load_images("tiles/CaveOutside/00"),
+            "CaveOutside01": load_images("tiles/CaveOutside/01"),
+            "CaveOutside02": load_images("tiles/CaveOutside/02"),
+            "GrassFloor": load_images("tiles/GrassFloor"),
+            "GrassGoose": load_images("tiles/GrassGoose"),
+            "GrassTrees": load_images("tiles/GrassTrees"),
+            "GrassTrees00": load_images("tiles/GrassTrees/00"),
+            "GrassTrees01": load_images("tiles/GrassTrees/01"),
+            "GrassBuildings": load_images("tiles/GrassBuildings"),
+            "GrassBuildings00": load_images("tiles/GrassBuildings/00"),
+            "GrassBuildings01": load_images("tiles/GrassBuildings/01"),
+            "GrassBuildings02": load_images("tiles/GrassBuildings/02"),
+            "GrassBuildings03": load_images("tiles/GrassBuildings/03"),
+            "GrassBuildings04": load_images("tiles/GrassBuildings/04"),
+            "GrassBushes": load_images("tiles/GrassBushes"),
+            "GrassDecor": load_images("tiles/GrassDecor"),
+            "GrassDecor00": load_images("tiles/GrassDecor/00"),
+            "GrassDecor02": load_images("tiles/GrassDecor/02"),
+            "GrassDecor03": load_images("tiles/GrassDecor/03"),
+            "GrassIndoorDecor": load_images("tiles/GrassIndoorDecor"),
+            "GrassIndoorDecor05": load_images("tiles/GrassIndoorDecor/05"),
+            "GrassIndoorDecor06": load_images("tiles/GrassIndoorDecor/06"),
+            "GrassIndoorDecor07": load_images("tiles/GrassIndoorDecor/07"),
+            "GrassIndoorDecor08": load_images("tiles/GrassIndoorDecor/08"),
+            "WaterFloor": load_images("tiles/WaterFloor"),
+            "WaterCatwalk": load_images("tiles/WaterCatwalk"),
+            "HouseFloor": load_images("tiles/HouseFloor"),
+            "HouseIndoor": load_images("tiles/HouseIndoor"),
+            "HouseIndoor00": load_images("tiles/HouseIndoor/00"),
+            "HouseIndoor01": load_images("tiles/HouseIndoor/01"),
+            "Items": load_images("tiles/Items"),
+            "player/"
+            + PlayerActions.STANDING.value: Animation(
+                load_images(f"player/{player_type}/" + PlayerActions.STANDING.value)
+            ),
+            "player/"
+            + PlayerActions.UP.value: Animation(
+                load_images(f"player/{player_type}/" + PlayerActions.UP.value)
+            ),
+            "player/"
+            + PlayerActions.DOWN.value: Animation(
+                load_images(f"player/{player_type}/" + PlayerActions.DOWN.value)
+            ),
+            "player/"
+            + PlayerActions.RIGHT.value: Animation(
+                load_images(f"player/{player_type}/" + PlayerActions.RIGHT.value)
+            ),
+            "player/"
+            + PlayerActions.LEFT.value: Animation(
+                load_images(f"player/{player_type}/" + PlayerActions.LEFT.value)
+            ),
         }
-        
+
         self.player = Player(self, (150, 150), (16, 16))
         self.animal = animal
-        
+
         self.map_handler = MapHandler(self, self.player)
         self.tilemap = self.map_handler.get_curr_map()
-        
+
         self.camera = Camera(self.display, self.player, self.tilemap)
         self.item_collector = ItemCollector(self.player, self.map_handler.maps)
         self.level_manager = LevelManager(self.animal, self.item_collector)
-        
-        self.npc_manager = NPCManager("data/npc/npc_data.txt", self.map_handler)
-        self.boss = Boss(self.map_handler.maps['5a'])
 
-        self.battle_detector = Battle_detector(self.game_state_manager, self.player, self.tilemap)
+        self.npc_manager = NPCManager("data/npc/npc_data.txt", self.map_handler)
+        self.boss = Boss(self.map_handler.maps["5a"])
+
+        self.battle_detector = Battle_detector(
+            self.game_state_manager, self.player, self.tilemap
+        )
 
         self.show_backpack = False
         self.show_animal_stats = False
@@ -92,18 +109,23 @@ class MapScreen:
 
         # self.sound_manager.play_music("game")
 
-
     def run(self):
         # update player pos
         if not self.is_player_paused():
-            self.player.update(self.tilemap, (self.movement[1] - self.movement[0], self.movement[3] - self.movement[2]))
+            self.player.update(
+                self.tilemap,
+                (
+                    self.movement[1] - self.movement[0],
+                    self.movement[3] - self.movement[2],
+                ),
+            )
             self.map_handler.change_map(self.level_manager.level)
             self.camera.update()
         else:
             self.movement = [False, False, False, False]
-        
+
         self.item_collector.collect_items(self.tilemap)
-        
+
         # battle
         xp = 0
         if self.had_battle:
@@ -113,31 +135,34 @@ class MapScreen:
 
         if self.handle_battle():
             self.had_battle = True
-            
-        
+
         # update xp
         new_lvl = self.level_manager.update(xp, self.map_handler.maps)
         if new_lvl is not None:
             self.npc_manager.activate_npc(new_lvl.new_level)
             self.new_level_window = new_lvl
 
-
         # render
-        self.display.fill((self.tilemap.tilemap["background_color"]["R"], self.tilemap.tilemap["background_color"]["G"], self.tilemap.tilemap["background_color"]["B"]))  
+        self.display.fill(
+            (
+                self.tilemap.tilemap["background_color"]["R"],
+                self.tilemap.tilemap["background_color"]["G"],
+                self.tilemap.tilemap["background_color"]["B"],
+            )
+        )
 
         self.tilemap.render(self.display, self.camera.pos)
         if self.map_handler.curr_map == "5a":
             self.boss.render_on_map(self.display, self.player, self.camera.pos)
         self.player.render(self.display, self.camera.pos)
         self.level_manager.render(self.display)
-        
-        
-        
+
         # check npc
-        npc = self.npc_manager.talk_with_npc(self.display, self.camera.pos, self.player, self.map_handler.curr_map)
+        npc = self.npc_manager.talk_with_npc(
+            self.display, self.camera.pos, self.player, self.map_handler.curr_map
+        )
 
         self.render_extra_window()
-        
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -160,35 +185,49 @@ class MapScreen:
                         self.show_backpack = True
                     elif self.show_backpack:
                         self.show_backpack = False
-                        
+
                 if event.key == pygame.K_v:
                     if not self.show_animal_stats and not self.is_player_paused():
                         self.show_animal_stats = True
                     elif self.show_animal_stats:
                         self.show_animal_stats = False
-                        
+
                 if event.key == pygame.K_t:
-                    if self.dialogue_window is None and not self.is_player_paused() and npc is not None:
-                        self.dialogue_window = DialogueWindow(npc, self.player.backpack, self.animal)
-                 
-                # TODO walka z bossem       
+                    if (
+                        self.dialogue_window is None
+                        and not self.is_player_paused()
+                        and npc is not None
+                    ):
+                        self.dialogue_window = DialogueWindow(
+                            npc, self.player.backpack, self.animal
+                        )
+
+                # TODO walka z bossem
                 if event.key == pygame.K_f:
                     if not self.is_player_paused() and self.boss.touch_player:
                         print("walka z bossem")
                         self.movement = [False, False, False, False]
-                        self.game.states[GameStates.BATTLE] = HonkBattleScreen(self.display, self.game_state_manager, self.animal, self.player.backpack, self.boss, self.game, True)
+                        self.game.states[GameStates.BATTLE] = HonkBattleScreen(
+                            self.display,
+                            self.game_state_manager,
+                            self.animal,
+                            self.player.backpack,
+                            self.boss,
+                            self.game,
+                            True,
+                        )
                         self.battle_detector.update_manager()
-                        
+
                 if event.key == pygame.K_q:
                     self.show_backpack = False
                     self.show_animal_stats = False
                     self.active_npc = None
                     self.help = False
-                
+
                 if event.key == pygame.K_h:
                     if (not self.help and not self.is_player_paused()) or self.help:
                         self.help = not self.help
-                    
+
                 # TODO delete xp
                 if event.key == pygame.K_x:
                     if not self.is_player_paused():
@@ -198,10 +237,10 @@ class MapScreen:
                         if new_lvl is not None:
                             self.npc_manager.activate_npc(new_lvl.new_level)
                             self.new_level_window = new_lvl
-                
+
                 if event.key == pygame.K_ESCAPE:
                     self.game_state_manager.set_state(GameStates.END)
-                
+
             if event.type == pygame.KEYUP:
                 if event.key in (pygame.K_LEFT, pygame.K_a):
                     self.movement[0] = False
@@ -213,45 +252,50 @@ class MapScreen:
                     self.movement[3] = False
                 if event.key == pygame.K_LSHIFT:
                     self.player.running = False
-                    
-        
+
         if self.had_battle:
             self.movement = [False, False, False, False]
-            
-        
-    
+
     def render_extra_window(self):
         if self.new_level_window is not None:
             self.new_level_window.render(self.display, self.game_state_manager.scale)
             if self.new_level_window.is_finished():
                 self.new_level_window = None
-                
+
         elif self.show_backpack:
-            self.player.backpack.render(self.display, self.game_state_manager.scale, False)
-            
-            
+            self.player.backpack.render(
+                self.display, self.game_state_manager.scale, False
+            )
+
         elif self.show_animal_stats:
             self.animal.render_statistics(self.display)
-            
+
         if self.dialogue_window is not None:
-            self.dialogue_window.render_dialogue(self.display, self.game_state_manager.scale)
+            self.dialogue_window.render_dialogue(
+                self.display, self.game_state_manager.scale
+            )
             if self.dialogue_window.dialogue_end():
                 self.dialogue_window = None
-                
+
         if self.help:
             self.help_window.render(self.display)
 
-
     def is_player_paused(self):
-        return self.show_backpack or self.show_animal_stats or \
-            self.new_level_window is not None or self.dialogue_window is not None or self.help
-
+        return (
+            self.show_backpack
+            or self.show_animal_stats
+            or self.new_level_window is not None
+            or self.dialogue_window is not None
+            or self.help
+        )
 
     def handle_battle(self):
         if self.battle_detector.detect_battle():
             # self.sound_manager.stop_music()
-            self.game.states[GameStates.BATTLE] = BattleScreen(self.display, self.game_state_manager, self.animal, self.player.backpack)
+            self.game.states[GameStates.BATTLE] = BattleScreen(
+                self.display, self.game_state_manager, self.animal, self.player.backpack
+            )
             self.battle_detector.update_manager()
-            
+
             return True
         return False
